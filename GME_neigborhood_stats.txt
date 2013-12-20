@@ -1,0 +1,15 @@
+neighbourhoodstatistics(in="D:\Chicago_Grasslands\GIS\covariates\decid_2012.tif", radius=1500, mean="D:\Chicago_Grasslands\PREDICTIONS\GRIDS\dec12ngb", edge=TRUE);
+
+neighbourhoodstatistics(in="D:\Chicago_Grasslands\GIS\covariates\dev_open_low_2012.tif", radius=1500, mean="D:\Chicago_Grasslands\PREDICTIONS\GRIDS\devol12ngb", edge=TRUE);
+
+neighbourhoodstatistics(in="D:\Chicago_Grasslands\GIS\covariates\dev_med_hi_2012.tif", radius=1500, mean="D:\Chicago_Grasslands\PREDICTIONS\GRIDS\devmh12ngb", edge=TRUE);
+
+neighbourhoodstatistics(in="D:\Chicago_Grasslands\GIS\covariates\water_2012.tif", radius=1500, mean="D:\Chicago_Grasslands\PREDICTIONS\GRIDS\wat12ngb", edge=TRUE);
+
+neighbourhoodstatistics(in="D:\Chicago_Grasslands\GIS\covariates\pasture_alfalfa_2012.tif", radius=1500, mean="D:\Chicago_Grasslands\PREDICTIONS\GRIDS\pasalf12ngb", edge=TRUE);
+
+neighbourhoodstatistics(in="D:\Chicago_Grasslands\GIS\covariates\herb_grass_2012.tif", radius=1500, mean="D:\Chicago_Grasslands\PREDICTIONS\GRIDS\hegr12ngb", edge=TRUE);
+
+neighbourhoodstatistics(in="D:\Chicago_Grasslands\GIS\covariates\wood_wet_2012.tif", radius=1500, mean="D:\Chicago_Grasslands\PREDICTIONS\GRIDS\wowe12ngb", edge=TRUE);
+
+neighbourhoodstatistics(in="D:\Chicago_Grasslands\GIS\covariates\oth_2012.tif", radius=1500, mean="D:\Chicago_Grasslands\PREDICTIONS\GRIDS\oth12ngb", edge=TRUE);

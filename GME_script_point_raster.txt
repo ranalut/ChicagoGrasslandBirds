@@ -1,0 +1,50 @@
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\sedwre_PA_proj.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\GRIDS\B1.tif", field="B1");
+
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\sedwre_PA_proj.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\GRIDS\B2.tif", field="B2");
+
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\sedwre_PA_proj.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\GRIDS\B3.tif", field="B3");
+
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\sedwre_PA_proj.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\GRIDS\B4.tif", field="B4");
+
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\sedwre_PA_proj.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\GRIDS\B5.tif", field="B5");
+
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\sedwre_PA_proj.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\GRIDS\B6.tif", field="B6");
+
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\sedwre_PA_proj.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\GRIDS\B7.tif", field="B7");
+
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\sedwre_PA_proj.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\GRIDS\B1ngb.tif", field="B1ngb");
+
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\sedwre_PA_proj.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\GRIDS\B2ngb.tif", field="B2ngb");
+
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\sedwre_PA_proj.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\GRIDS\B3ngb.tif", field="B3ngb");
+
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\sedwre_PA_proj.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\GRIDS\B4ngb.tif", field="B4ngb");
+
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\sedwre_PA_proj.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\GRIDS\B5ngb.tif", field="B5ngb");
+
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\sedwre_PA_proj.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\GRIDS\B6ngb.tif", field="B6ngb");
+
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\sedwre_PA_proj.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\GRIDS\B7ngb.tif", field="B7ngb");
+
+#### NASS data
+
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\henspa_PA_NASS.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\NASS_VARIABLES\decid12.tif", field="dec12");
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\henspa_PA_NASS.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\NASS_VARIABLES\devol12.tif", field="devol12");
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\henspa_PA_NASS.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\NASS_VARIABLES\devmh12.tif", field="devmh12");
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\henspa_PA_NASS.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\NASS_VARIABLES\hergr12.tif", field="hergr12");
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\henspa_PA_NASS.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\NASS_VARIABLES\pasalf12.tif", field="pasalf12");
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\henspa_PA_NASS.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\NASS_VARIABLES\wat12.tif", field="wat12");
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\henspa_PA_NASS.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\NASS_VARIABLES\oth12.tif", field="oth12");
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\henspa_PA_NASS.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\NASS_VARIABLES\wowe12.tif", field="wowe12");
+
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\henspa_PA_NASS.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\NASS_VARIABLES\decid12ngb.tif", field="dec12ngb");
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\henspa_PA_NASS.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\NASS_VARIABLES\devol12ngb.tif", field="devol12ngb");
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\henspa_PA_NASS.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\NASS_VARIABLES\devmh12ngb.tif", field="devmh12ngb");
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\henspa_PA_NASS.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\NASS_VARIABLES\hergr12ngb.tif", field="hergr12ngb");
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\henspa_PA_NASS.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\NASS_VARIABLES\paal12ngb.tif", field="paal12ngb");
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\henspa_PA_NASS.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\NASS_VARIABLES\wat12ngb.tif", field="wat12ngb");
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\henspa_PA_NASS.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\NASS_VARIABLES\oth12ngb.tif", field="oth12ngb");
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\henspa_PA_NASS.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\NASS_VARIABLES\wowe12ngb.tif", field="wowe12ngb");
+
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\henspa_PA_NASS.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\NASS_VARIABLES\V12_100.tif", field="V12_100");
+isectpntrst(in="D:\Chicago_Grasslands\BIRD_DATA\BCN\henspa_PA_NASS.shp", raster="D:\Chicago_Grasslands\PREDICTIONS\NASS_VARIABLES\V12_500.tif", field="V12_500");
