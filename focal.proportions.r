@@ -1,19 +1,6 @@
 library(raster)
 library(ncdf)
 
-prop.of.window <- function(x,value,w.matrix,...)
-{
-	cat('value:',value,'\n')
-	print(w.matrix)
-	print(x)
-	stop('cbw')
-	x <- na.omit(x)
-	# ifelse(sum(is.na(x))>0,return(NA),x <- x[x!=0])
-	print(x)
-	output <- length(x[x==value]) / length(weights[weights>0])
-	return(output)
-}
-
 workspace <- 'D:/Chicago_Grasslands/GIS/nass_layers/'
 
 nass<-read.csv('d:/chicago_grasslands/gis/nass_file_lists.csv',header=T,stringsAsFactors=FALSE)
@@ -23,28 +10,33 @@ years <- seq(2012,2006,-1)
 cat('variables:',variables,'\n')
 cat('values:',values,'\n')
 cat('years:',years,'\n')
+radius <- 250 # (meters)
+startTime <- Sys.time()
 
 # stop('cbw')
 
 for (i in 1:length(years))
 {
+	r.temp <- raster(paste(workspace,(2013-i),'_nass_clip_30m.tif',sep=''))
+	# r.temp <- crop(x=r.temp,y=extent(600000,650000,2050000,2100000)) # For testing/debugging
+	# plot(r.temp)
+	is.na(r.temp) <- 0
+	
 	for (j in 1:length(variables))
 	{
-		raster.temp <- raster(paste(workspace,(2013-i),'_nass_clip_30m.tif',sep=''))
-		# Testing/debugging code
-			# print(raster.temp)
-			raster.temp <- crop(x=raster.temp,y=extent(600000,650000,2050000,2100000))
-			print(raster.temp)
-			# print(is.na(raster.temp))
-			# plot(raster.temp)
-			# print(focalWeight(x=raster.temp, d=90, type='circle')) # Cells not in circle are weighted zero.
-			# stop('cbw')
-		
-		w.matrix <- focalWeight(x=raster.temp, d=90, type='circle')
-		focal.prop <- focal(raster.temp, w=w.matrix, fun=prop.of.window, pad=TRUE, padValue=NA, value=values[j], w.matrix=w.matrix) # d=250
-		stop('cbw')
-		writeRaster(focal.prop, paste(workspace,years[i],'_',variables[j],'_nass_clip_30m.tif',sep=''),overwrite=TRUE)
-		stop('cbw')
+		# Rescore to binary raster
+		r.binary <- r.temp
+		r.binary[r.binary!=values[j]] <- 0
+		r.binary[r.binary==values[j]] <- 1
+		# plot(r.binary)
+		w.matrix <- focalWeight(x=raster.temp, d=radius, type='circle')
+		focal.prop <- focal(r.binary, w=w.matrix) # , pad=TRUE, padValue=0)
+		# print(focal.prop)
+		# plot(focal.prop, main=paste(years[i],variables[j]))
+		writeRaster(focal.prop, paste(workspace,years[i],'_',variables[j],'_nass_30m_r',radius,'.tif',sep=''),overwrite=TRUE)
+		# stop('cbw')
+		cat('year',years[i],'variable',variables[j],startTime-Sys.time(),'\n')
 	}
-	# Build and write out raster stack here.
+	# stop('cbw')
 }
+
