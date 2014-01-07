@@ -7,13 +7,19 @@ library(rgdal)
 library(raster)
 library(sp)
 
-all.data <- read.csv("D:/Chicago_Grasslands/BIRD_DATA/BCN/31qryBreeding_JGS_version.csv", header=TRUE)
+# all.data <- read.csv("D:/Chicago_Grasslands/BIRD_DATA/BCN/31qryBreeding_JGS_version.csv", header=TRUE)
+
+unique.pts <- readOGR(dsn='D:/Chicago_Grasslands/BIRD_DATA/BCN',layer='unique_pts_albers',encoding='ESRI Shapefile')
+print(unique.pts)
 
 # trim observations to those meeting requirements
-obs <- all.data[all.data$VALID==1 & 
-				all.data$PROTOCOL_ID=="P21" & 
-				all.data$DURATION_HRS==0.08 &
-				all.data$ALL_OBS_REPORTED==1,]
+unique.pts <- all.data[unique.pts$VALID==1 & 
+				unique.pts$PROTOCOL_ID=="P21" & 
+				unique.pts$DURATION_HRS==0.08 &
+				unique.pts$ALL_OBS_REPORTED==1,]
+
+print(unique.pts)
+stop('cbw')
 
 # Create unique list of count submissions per birder (SUB_ID).  The VALID field lists the number of species submitted for each unique count.  The output includes repeat (annual or more frequent) counts at the same point.
 # counts <- aggregate(VALID ~ SUB_ID + JHOUR + JDATE + YEAR + LATITUDE + LONGITUDE, obs, length)
