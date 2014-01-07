@@ -51,8 +51,8 @@ for (n in 1:length(radius))
 		}
 		
 		# Remove all the temporary files for that year's calculations.  
-		# file.remove(dir('c:/users/cwilsey/appdata/local/temp/r_raster_tmp/cwilsey',full.names=TRUE))
-		file.remove(dir('c:/users/jschuetz/appdata/local/temp/r_raster_tmp/jschuetz',full.names=TRUE))
+		file.remove(dir('c:/users/cwilsey/appdata/local/temp/r_raster_tmp/cwilsey',full.names=TRUE))
+		# file.remove(dir('c:/users/jschuetz/appdata/local/temp/r_raster_tmp/jschuetz',full.names=TRUE))
 		# stop('cbw')
 	}
 }
