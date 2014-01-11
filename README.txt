@@ -21,6 +21,10 @@ species.data.r
 # Construction of Boosted Regressing Tree models:
 brt.models.r
 
+# Making predictions
+load.prediction.data.r
+model.prediction.r
+
 
 
 
