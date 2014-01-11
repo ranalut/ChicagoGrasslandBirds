@@ -38,6 +38,7 @@ for (i in 1:length(years))
 	nass.data[[i]] <- extract(temp,unique.pts)
 	colnames(nass.data[[i]]) <- c(paste(nass.var,'.',radius[1],sep=''),paste(nass.var,'.',radius[2],sep=''))
 	nass.data[[i]] <- data.frame(unique.pts@data,nass.data[[i]])
+	
 	write.csv(nass.data[[i]],paste(output.path,years[i],'.nass.extract.csv',sep=''))
 	# stop('cbw')
 	
