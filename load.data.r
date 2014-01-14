@@ -2,16 +2,7 @@
 library(rgdal)
 library(raster)
 
-# Define inputs and file paths
-years <- c(2007, 2009)
-radius <- c(100, 500)
-days <- c(215,156)
-bands <- seq(1,7,1)
-nass.var <- c('water','herb.wetland','grass.hay','alfalfa.etc','dev.low','dev.high','decid.wood','wood.wetland','other')
-
-nass.path <- 'd:/chicago_grasslands/gis/nass_layers/'
-landsat.path <- 'd:/chicago_grasslands/landsat2/'
-output.path <- 'd:/chicago_grasslands/models/'
+source('settings.r')
 
 nass.data <- list()
 landsat.data <- list()
