@@ -12,18 +12,6 @@ library(tcltk)
 
 source('settings.r')
 
-# Step 1 ============================================
-# Creates spatial points objects for the unique survey points in the BCN dataset and extracts data from the nass and landsat datasets, assembled a raster stacks.  Output is saves as .csv files in /Models/ folder and as an R workspace.
-
-# source('load.data.r') 
-
-# Step 2 ============================================
-# Generate datasets for each individual species pulling data for each survey from it's respective year in the multi-year dataset.
-
-# source('species.data.r') 
-
-# Step 3 ===========================================
-# Now, we will build BRT models for individual species...
 load(file=paste(output.path,'species.data.v1.rdata',sep=''))
 
 # NASS models
