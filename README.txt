@@ -5,6 +5,9 @@ This repository is for the Chicago Grassland Birds habitat suitability modeling 
 # SCRIPTS #####################################
 Below is an outline of the scripts and their functions:
 
+# Settings scripts identifies your workspace, variables, etc.
+settings.r
+
 # Processing NASS data layers to extract percent cover measures at multiple spatial scales:
 focal.proportions.r
 
@@ -25,6 +28,10 @@ brt.models.r
 load.prediction.data.r
 model.prediction.r
 
+# Reproject the Landsat maps to Albers Equal Area projection.  
+# NOTE: This did introduce some negative values.  So, I created a script to truncate the data at zero.
+reproject.maps.r
+truncate.r
 
 
 
