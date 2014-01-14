@@ -33,7 +33,9 @@ model.prediction.r
 reproject.maps.r
 truncate.r
 
-
+# Utilities
+rm.na.pts.r
+build.similar.raster.r
 
 
 # ARCHIVAL SCRIPTS #####################################
