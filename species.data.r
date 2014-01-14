@@ -1,8 +1,9 @@
 library(rgdal)
 library(sp)
+
+source('settings.r')
 source('rm.na.pts.r') # Loads a function used below.
 
-output.path <- 'd:/chicago_grasslands/models/'
 load(file=paste(output.path,'unique.point.data.v1.rdata',sep=''))
 
 # Load all data
@@ -16,8 +17,6 @@ print(dim(obs))
 counts <- aggregate(VALID ~ SUB_ID + JHOUR + JDATE + YEAR + LATITUDE + LONGITUDE, obs, length)
 
 # select observations for species of interest
-spp.names <- c('boboli','sedwre','henspa','easmea','graspa')
-years <- c(2007,2009)
 
 nass.spp.data <- list()
 landsat.spp.data <- list()
@@ -48,14 +47,12 @@ for (i in 1:length(spp.names))
 	}
 	
 	# NASS
-	# nass.spp.data[[i]]$HOW_MANY_ATLEAST[is.na(nass.spp.data[[i]]$HOW_MANY_ATLEAST)==TRUE] <- 0
 	n.col <- dim(nass.spp.data[[i]])[2]
 	test <- apply(X=nass.spp.data[[i]][,(n.col-18):n.col],MAR=1,FUN=rm.na.pts)
 	nass.spp.data[[i]] <- nass.spp.data[[i]][test==FALSE,]
 	# print(colnames(nass.spp.data[[i]])) # ; print(dim(nass.spp.data[[i]])); stop('cbw')
 	
 	# Landsat
-	# landsat.spp.data[[i]]$HOW_MANY_ATLEAST[is.na(landsat.spp.data[[i]]$HOW_MANY_ATLEAST)==TRUE] <- 0
 	n.col <- dim(landsat.spp.data[[i]])[2]
 	test <- apply(X=landsat.spp.data[[i]][,(n.col-14):n.col],MAR=1,FUN=rm.na.pts)
 	landsat.spp.data[[i]] <- landsat.spp.data[[i]][test==FALSE,]
@@ -65,6 +62,8 @@ for (i in 1:length(spp.names))
 
 save(nass.spp.data,landsat.spp.data,file=paste(output.path,'species.data.v1.rdata',sep=''))
 
+# =====================================================
+# Justin's original code
 # join to set of unique submissions
 # spp_PA$HOW_MANY_ATLEAST[i]<-0
 # spp_PA<-spp_PA[,-(6:9)]
