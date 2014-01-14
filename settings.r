@@ -25,3 +25,31 @@ study.area.2 <- extent(matrix(c(358000,459000,4558000,4712000),ncol=2,byrow=TRUE
 
 do.nass <- 'y'
 do.landsat <- 'n'
+
+# Step 1: Data Processing =========================================
+# Processing NASS data layers to extract percent cover measures at multiple spatial scales:
+focal.proportions.r
+# Processing Landsat data layers to extract mean band values at multiple spatial scales:
+landsat.focal.mean.r
+# Atmospheric correction of landsat imagery and cloud estraction
+landsat.processing.r
+
+# Step 2: Load Data ============================================
+# Creates spatial points objects for the unique survey points in the BCN dataset and extracts data from the nass and landsat datasets, assembled a raster stacks.  Output is saves as .csv files in /Models/ folder and as an R workspace.
+# source('load.data.r') 
+
+# Step 3: Extract Species Data ============================================
+# Generate datasets for each individual species pulling data for each survey from it's respective year in the multi-year dataset.
+# source('species.data.r') 
+
+# Step 4: Build Models ===========================================
+# Now, we will build BRT models for individual species...
+# source('brt.models.r')
+
+# Step 5: Prediction =============================================
+# source('load.prediction.data.r')
+# source('model.prediction.r')
+
+# Step 6: Post-processing ======================================
+# source('reproject.maps.r')
+# source('truncate.r')
