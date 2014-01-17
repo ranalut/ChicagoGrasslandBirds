@@ -10,45 +10,44 @@ library(tcltk)
 # library(rgdal)
 # library(mgcv)
 
-source('settings.r')
-
-load(file=paste(output.path,'species.data.v1.rdata',sep=''))
+# source('settings.r')
 
 # NASS models
-nass.models <- list()
-for (i in 1:length(nass.spp.data))
+if (do.nass=='y')
 {
-	cat('\n\n\n\n\nstart nass',spp.names[i],'########################\n')
-	cat('points considered...',dim(nass.spp.data[[i]])[1],'\n')
-	nass.models[[i]] <- gbm.step(data=nass.spp.data[[i]], gbm.x=c(4:5,9:26), gbm.y=6, family="poisson", tree.complexity=5, learning.rate=lr[i], bag.fraction=0.5)
-	# nass.models[[i]] <- randomForest(x=nass.spp.data[[i]][,c(4:5,9:26)], y=nass.spp.data[[i]][,6], importance=TRUE)
-	test <- predict.gbm(newdata=nass.spp.data[[i]][,c(4:5,9:26)], nass.models[[i]], n.trees=nass.models[[i]]$n.trees, type='response', progress='window', na.rm=TRUE)
-	plot(test ~ nass.spp.data[[i]][,6], main=paste(spp.names[i],', fitted ~ obs',sep=''), xlab='counts', ylab='predicted')
-	print(table(round(test)))
-	cat('end nass',spp.names[i],'############################\n')
-	# stop('cbw')
+	nass.models <- list()
+	for (i in 1:length(nass.spp.data))
+	{
+		cat('\n\n\n\n\nstart nass',spp.names[i],'########################\n')
+		cat('points considered...',dim(nass.spp.data[[i]])[1],'\n')
+		nass.models[[i]] <- gbm.step(data=nass.spp.data[[i]], gbm.x=c(4:5,9:26), gbm.y=6, family="poisson", tree.complexity=5, learning.rate=lr[i], bag.fraction=0.5)
+		test <- predict.gbm(newdata=nass.spp.data[[i]][,c(4:5,9:26)], nass.models[[i]], n.trees=nass.models[[i]]$n.trees, type='response', progress='window', na.rm=TRUE)
+		plot(test ~ nass.spp.data[[i]][,6], main=paste(spp.names[i],', fitted ~ obs',sep=''), xlab='counts', ylab='predicted')
+		print(table(round(test)))
+		cat('end nass',spp.names[i],'############################\n')
+		# stop('cbw')
+	}
 }
-# stop('cbw')
 
 # Landsat models
-landsat.models <- list()
-for (i in 1:length(nass.spp.data))
+if (do.landsat=='y')
 {
-	cat('\n\n\n\nstart landsat',spp.names[i],'########################\n')
-	cat('points considered...',dim(nass.spp.data[[i]])[1],'\n')
-	landsat.models[[i]] <- gbm.step(data=landsat.spp.data[[i]], gbm.x=c(4:5,9:22), gbm.y=6, family="poisson", tree.complexity=5, learning.rate=lr[i], bag.fraction=0.5)
-	# landsat.models[[i]] <- randomForest(x=landsat.spp.data[[i]][,c(4:5,9:22)], y=landsat.spp.data[[i]][,6], importance=TRUE)
-	test <- predict.gbm(newdata=landsat.spp.data[[i]][,c(4:5,9:22)], landsat.models[[i]], n.trees=landsat.models[[i]]$n.trees, type='response', progress='window', na.rm=TRUE)
-	plot(test ~ landsat.spp.data[[i]][,6], main=paste(spp.names[i],', fitted ~ obs',sep=''), xlab='counts', ylab='predicted')
-	print(table(round(test)))
-	cat('end landsat',spp.names[i],'############################\n')
-	# stop('cbw')
+	landsat.models <- list()
+	for (i in 1:length(landsat.spp.data))
+	{
+		cat('\n\n\n\nstart landsat',spp.names[i],'########################\n')
+		cat('points considered...',dim(landsat.spp.data[[i]])[1],'\n')
+		landsat.models[[i]] <- gbm.step(data=landsat.spp.data[[i]], gbm.x=c(4:5,9:22), gbm.y=6, family="poisson", tree.complexity=5, learning.rate=lr[i], bag.fraction=0.5)
+		test <- predict.gbm(newdata=landsat.spp.data[[i]][,c(4:5,9:22)], landsat.models[[i]], n.trees=landsat.models[[i]]$n.trees, type='response', progress='window', na.rm=TRUE)
+		plot(test ~ landsat.spp.data[[i]][,6], main=paste(spp.names[i],', fitted ~ obs',sep=''), xlab='counts', ylab='predicted')
+		print(table(round(test)))
+		cat('end landsat',spp.names[i],'############################\n')
+		# stop('cbw')
+	}
 }
 
-# Version 1 are full models
-# Version 2 were RF models, but I suspect that I wrote over them.
-# Version 3 are models w/o JDATE and JHOUR 
-save(nass.models, landsat.models, file=paste(output.path,'species.models.v1.rdata',sep=''))
+test.nass.model <- gbm.step(data=test.nass, gbm.x=c(4:5,9:22), gbm.y=6, family="poisson", tree.complexity=5, learning.rate=0.005, bag.fraction=0.5)
+test.landsat.model <- gbm.step(data=test.landsat, gbm.x=c(4:5,9:22), gbm.y=6, family="poisson", tree.complexity=5, learning.rate=0.005, bag.fraction=0.5)
 
 # ========================================================================
 # Justin's original BRT code:
