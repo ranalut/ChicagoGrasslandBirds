@@ -3,7 +3,7 @@ library(raster)
 library(rgdal)
 
 source('build.similar.raster.r') # Function used below to build rasters with similar resolution/extent and fill in values.
-source('settings.r')
+# source('settings.r')
 
 # ===========================================================
 # NASS data
@@ -46,5 +46,4 @@ print(landsat.pred.data)
 # nass.pred.data[is.na(nass.pred.data)==TRUE] <- 0
 # landsat.pred.data[is.na(landsat.pred.data)==TRUE] <- 0
 
-save(nass.pred.data, landsat.pred.data, file=paste(output.path,'pred.data.v2.rdata',sep=''))
 

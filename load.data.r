@@ -2,7 +2,7 @@
 library(rgdal)
 library(raster)
 
-source('settings.r')
+# source('settings.r')
 
 nass.data <- list()
 landsat.data <- list()
@@ -17,11 +17,11 @@ unique.pts.2 <- readOGR(dsn='D:/Chicago_Grasslands/BIRD_DATA/BCN',layer='unique_
 print(unique.pts.2)
 unique.pts.2@data <- unique.pts.2@data[,30:39]
 
-for (i in 1:length(years))
+for (i in 1:length(data.yrs))
 {
 	nass.file.names <- c(
-		paste(nass.path,years[i],'_',nass.var,'_nass_30m_r',radius[1],'.tif',sep=''),
-		paste(nass.path,years[i],'_',nass.var,'_nass_30m_r',radius[2],'.tif',sep='')
+		paste(nass.path,data.yrs[i],'_',nass.var,'_nass_30m_r',radius[1],'.tif',sep=''),
+		paste(nass.path,data.yrs[i],'_',nass.var,'_nass_30m_r',radius[2],'.tif',sep='')
 		)
 	# print(nass.file.names)
 	temp <- stack(nass.file.names)
@@ -29,13 +29,12 @@ for (i in 1:length(years))
 	nass.data[[i]] <- extract(temp,unique.pts)
 	colnames(nass.data[[i]]) <- c(paste(nass.var,'.',radius[1],sep=''),paste(nass.var,'.',radius[2],sep=''))
 	nass.data[[i]] <- data.frame(unique.pts@data,nass.data[[i]])
-	
-	write.csv(nass.data[[i]],paste(output.path,years[i],'.nass.extract.csv',sep=''))
+	# write.csv(nass.data[[i]],paste(output.path,data.yrs[i],'.nass.extract.csv',sep=''))
 	# stop('cbw')
 	
 	landsat.file.names <- c(
-		paste(landsat.path,years[i],'_d',days[i],'_b',bands,'_r',radius[1],'.tif',sep=''),
-		paste(landsat.path,years[i],'_d',days[i],'_b',bands,'_r',radius[2],'.tif',sep='')
+		paste(landsat.path,data.yrs[i],'_d',days[i],'_b',bands,'_r',radius[1],'.tif',sep=''),
+		paste(landsat.path,data.yrs[i],'_d',days[i],'_b',bands,'_r',radius[2],'.tif',sep='')
 		)
 	# print(landsat.file.names)
 	temp2 <- stack(landsat.file.names)
@@ -43,9 +42,6 @@ for (i in 1:length(years))
 	landsat.data[[i]] <- extract(temp2,unique.pts.2)
 	colnames(landsat.data[[i]]) <- c(paste('b',bands,'.',radius[1],sep=''),paste('b',bands,'.',radius[2],sep=''))
 	landsat.data[[i]] <- data.frame(unique.pts.2@data,landsat.data[[i]])
-	write.csv(landsat.data[[i]],paste(output.path,years[i],'.landsat.extract.csv',sep=''))
+	# write.csv(landsat.data[[i]],paste(output.path,data.yrs[i],'.landsat.extract.csv',sep=''))
 	# stop('cbw')
 }
-
-save(nass.data,landsat.data,file=paste(output.path,'unique.point.data.v1.rdata',sep=''))
-# stop('cbw')

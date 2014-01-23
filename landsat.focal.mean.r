@@ -2,15 +2,6 @@ library(raster)
 
 workspace <- 'D:/Chicago_Grasslands/LANDSAT2/'
 
-years <- c(2007,2009) # seq(2012,2006,-1)
-days <- c(215,156)
-code <- c('01','02')
-bands <- seq(1,7,1)
-folder.names <- paste('lt5023031',years,days,'PAC',code,sep='')
-print(folder.names)
-# stop('cbw')
-
-radius <- c(100,500) # (meters)
 startTime <- Sys.time()
 
 # stop('cbw')

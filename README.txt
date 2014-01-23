@@ -26,12 +26,7 @@ brt.models.r
 
 # Making predictions
 load.prediction.data.r
-model.prediction.r
-
-# Reproject the Landsat maps to Albers Equal Area projection.  
-# NOTE: This did introduce some negative values.  So, I created a script to truncate the data at zero.
-reproject.maps.r
-truncate.r
+model.prediction.r # Landsat predictions are in a different projection than NASS.
 
 # Utilities
 rm.na.pts.r
@@ -43,6 +38,9 @@ The project has been completed in multiple rounds and has included some abandone
 As a result some of the scripts are archival.
 These include:
 
+reproject.maps.r # Reproject the Landsat maps to Albers Equal Area projection. 
+truncate.r # I created a script to truncate the data at zero.
+round.r # shouldn't be needed anymore
 all.survey.pts.r
 clip_predictions.r
 gme_neighborhood_stats.txt
