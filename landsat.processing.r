@@ -5,10 +5,14 @@ library(landsat)
 source('remove.clouds.r')
 source('atmos.correction.r')
 source('cloud.shadows.r')
+source('overlay.fxns.r')
+source('mask.clouds.r')
 
 do.atmos <- 	'n'
 do.clouds <- 	'n'
+do.clean <- 	'y'
 do.shadows <- 	'y'
+do.mask <- 		'n'
 
 workspace <- 'D:/Chicago_Grasslands/LANDSAT2/'
 # workspace <- 'Z:/Chicago_Grasslands/LANDSAT2/'
@@ -25,8 +29,10 @@ cloud.shifts <- c(
 shifts <- data.frame(matrix(cloud.shifts,byrow=TRUE,ncol=3))
 colnames(shifts) <- c('year','x.shift','y.shift')
 
+min.cloud <- 56
+
 # for (n in 1:5)
-for (n in 2:4)
+for (n in 1)
 {
 	if (do.atmos=='y')
 	{
@@ -47,8 +53,21 @@ for (n in 2:4)
 		}
 	}
 	
+	if (do.clean=='y')
+	{
+		startTime <- Sys.time()
+		cat('start level value =',i,'\n')
+		test <- clean.up.clouds(workspace=workspace, file.name=file.names[n], level=0.0009, threshold=min.cloud)
+		cat('end level value =',i,Sys.time()-startTime,'\n')
+	}
+	
 	if (do.shadows=='y')
 	{
 		cloud.shadow(workspace=workspace, level=0.0009, file.name=file.names[n], padx=abs(shifts[n,'x.shift']), pady=abs(shifts[n,'y.shift']), shiftx=shifts[n,'x.shift'], shifty=shifts[n,'y.shift'])
+	}
+	
+	if (do.mask=='y')
+	{
+		mask.clouds(workspace=workspace, file.name=file.names[n], level=0.0009)
 	}
 }
