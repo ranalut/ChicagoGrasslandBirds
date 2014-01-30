@@ -3,79 +3,52 @@ library(raster)
 library(landsat)
 
 source('remove.clouds.r')
+source('atmos.correction.r')
+source('cloud.shadows.r')
 
-# workspace <- 'D:/Chicago_Grasslands/LANDSAT2/'
+do.atmos <- 	'n'
+do.clouds <- 	'n'
+do.shadows <- 	'y'
+
+workspace <- 'D:/Chicago_Grasslands/LANDSAT2/'
 # workspace <- 'Z:/Chicago_Grasslands/LANDSAT2/'
-file.names <- c('lt50230312011194pac01','lt50230312010175EDC00','lt50230312009156pac02','lt50230312007167pac01','lt50230312006164pac01')
+file.names <- c('lt50230312006164pac01','lt50230312007167pac01','lt50230312009156pac02','lt50230312010175EDC00','lt50230312011194pac01')
 
-atmos.cor <- function(workspace, file.name, sensor='TM5')
+cloud.shifts <- c(
+2006,-15,-14, # Looks good.
+2007,-31,-27, # Tuned to study area.
+# 2008,NA,NA,
+2009,-23,-21, # Tuned to clouds within the study area.
+2010,-20,-13, # This is tuned to the clouds within the study area near downtown Chicago.  There are a couple of clouds west of downtown that are lower and the offset isn't quite right, but these are only a handful and do not overlap with points.
+2011,-15,-12  # Looks good.
+)
+shifts <- data.frame(matrix(cloud.shifts,byrow=TRUE,ncol=3))
+colnames(shifts) <- c('year','x.shift','y.shift')
+
+# for (n in 1:5)
+for (n in 2:4)
 {
-	# Loop through bands for atmospheric corrections and to remove clouds and cloud shadows.  
-
-	radiances <- scan(file=paste(workspace,file.name,'/',file.name,'_MTL.txt',sep=''),what=list(character(),character(),numeric()),skip=121,nlines=14)
-	radiances <- list(g=radiances[[3]][c(1:7)],b=radiances[[3]][c(8:14)])
-	elevation <- scan(file=paste(workspace,file.name,'/',file.name,'_MTL.txt',sep=''),what=list(character(),character(),numeric()),skip=60,nlines=1)[[3]]
-	the.date <- scan(file=paste(workspace,file.name,'/',file.name,'_MTL.txt',sep=''),what=list(character(),character(),character()),skip=21,nlines=1)[[3]]
-	e.sun <- list(TM5=c(1983,1795,1539,1028,219.8,NA,83.49),ETM=c(1997,1812,1533,1039,230.8,NA,84.9)) # ,EO1=c(1996,1807,1536,1145,235.1,82.38))
-	e.sun <- e.sun[[sensor]]
-	
-	# print(radiances); print(elevation); print(the.date) # print(azimuth)
-
-	bands <- seq(1,7,1)
-	svh.cutoffs <- c(-Inf,55,75,95,115) # c(55,75,95,115,255)
-	
-	for (i in 1:length(bands))
+	if (do.atmos=='y')
 	{
-		tiff <- readGDAL(fname=paste(workspace,file.name,'/',file.name,'_b',bands[i],'.tif',sep=''))
-		
-		if (bands[i]==6) 
-		{
-			thermal <- thermalband(tiff, band = 6)
-			thermal <- raster(thermal)
-			writeRaster(thermal, paste(workspace,file.name,'/atmos.',file.name,'_b',bands[i],'.tif',sep=''),overwrite=TRUE)
-			next(i)
-		}
-		
-		if (bands[i]==1)
-		{
-			SHV <- table(tiff@data[, 1])
-			SHV <- min(as.numeric(names(SHV)[SHV > 1000]))
-			cat('SHV',SHV,'\n')
-			shv.col <- sum(SHV > svh.cutoffs)
-			cat('SHV column',shv.col,'\n')
-			tiff.DOS <- DOS(sat = ifelse(sensor=='TM5',5,7), SHV = SHV, SHV.band = 1, Grescale = radiances[['g']][i], Brescale = radiances[['b']][i], sunelev = elevation, edist = ESdist(the.date))
-			tiff.DOS <- tiff.DOS[["DNfinal.mean"]]
-			# print(tiff.DOS)
-			tiff.DOS <- tiff.DOS[i,shv.col]
-			print(tiff.DOS)
-			# stop('cbw')
-		}
-		
-		atmos.tiff <- radiocorr(tiff, Grescale = radiances[['g']][i], Brescale = radiances[['b']][i], sunelev = elevation, edist = ESdist(the.date), Esun = e.sun[i], Lhaze = tiff.DOS, method = "DOS4")
-		# print(atmos.tiff); stop('cbw')
-		atmos.tiff <- raster(atmos.tiff)
-		writeRaster(atmos.tiff, paste(workspace,file.name,'/atmos.',file.name,'_b',bands[i],'.tif',sep=''),overwrite=TRUE)
-		# stop('cbw')
+		atmos.cor(workspace=workspace, file.name=file.names[n], sensor='TM5')
 	}
-}	
-
-for (n in c(4))
-{
-	# atmos.cor(workspace=workspace, file.name=file.names[n], sensor='TM5')
 	
-	level.seq <- seq(0.0012,0.0008,-0.0001) # default = 0.0014
-	# level.seq <- 0.0011
-
-	for (i in level.seq)
+	if (do.clouds=='y')
 	{
-		startTime <- Sys.time()
-		cat('start level value =',i,'\n')
-		rm.clouds(workspace=workspace, file.name=file.names[n], level=i)
-		cat('end level value =',i,Sys.time()-startTime,'\n')
+		level.seq <- seq(0.0012,0.0008,-0.0001) # default = 0.0014
+		# level.seq <- 0.0011
+
+		for (i in level.seq)
+		{
+			startTime <- Sys.time()
+			cat('start level value =',i,'\n')
+			rm.clouds(workspace=workspace, file.name=file.names[n], level=i)
+			cat('end level value =',i,Sys.time()-startTime,'\n')
+		}
+	}
+	
+	if (do.shadows=='y')
+	{
+		cloud.shadow(workspace=workspace, level=0.0009, file.name=file.names[n], padx=abs(shifts[n,'x.shift']), pady=abs(shifts[n,'y.shift']), shiftx=shifts[n,'x.shift'], shifty=shifts[n,'y.shift'])
 	}
 }
-
-
-
-
-
