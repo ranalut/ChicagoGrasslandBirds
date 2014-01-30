@@ -14,7 +14,23 @@ rm.clouds <- function(workspace, file.name, level)
 	
 	cloud.tiff <- clouds(band1,band6,level)
 	cloud.tiff <- raster(cloud.tiff)
+	
 	writeRaster(cloud.tiff, paste(workspace,file.name,'/clouds.',level,'.',file.name,'.tif',sep=''), overwrite=TRUE)
+}
+
+clean.up.clouds <- function(workspace, file.name, level, threshold)
+{
+	cloud.tiff <- raster(paste(workspace,file.name,'/clouds.',level,'.',file.name,'.tif',sep=''))
+	
+	groups <- clump(cloud.tiff, directions=4)
+	# plot(groups)
+	patch.size <- as.data.frame(freq(groups, progress='text'))
+	# return(list(groups,patch.size))
+	okay <- patch.size$value[patch.size$count >= threshold]
+	okay <- data.frame(okay,values=rep(1,length(okay)))
+	groups <- subs(groups,okay,subsWithNA=TRUE)
+	# plot(groups)
+	cloud.tiff <- mask(cloud.tiff,groups,filename=paste(workspace,file.name,'/clouds.rm.',level,'.',file.name,'.tif',sep=''), overwrite=TRUE) 
 }
 
 # # level.seq <- seq(0.0014,0.0005,-0.0001)
