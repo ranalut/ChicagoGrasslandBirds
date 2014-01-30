@@ -25,7 +25,5 @@ fxn1 <- function(x,y)
 
 fxn1(NA,1); fxn1(1,1); fxn1(NA,NA)
 
-shifts <- c(-15,-12) # I need to figure out the shifts for each of the Landsat images that we are working with.
-cloud.shadow(workspace='D:/Chicago_Grasslands/LANDSAT2/', level=0.0009, file.name='lt50230312011194pac01', padx=abs(shifts[1]), pady=abs(shifts[2]), shiftx=shifts[1], shifty=shifts[2])
 
 
