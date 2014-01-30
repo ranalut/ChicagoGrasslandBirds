@@ -2,20 +2,20 @@ library(raster)
 
 setwd('d:/github/chicagograsslandbirds/')
 
-do.data.proc <- 'n' # See processing settings below
-do.load.data <- 'n'
+do.data.proc <- 'n' # See processing settings below.  Remove clouds (landsat.processing.r) before running.
+do.load.data <- 'y'
 do.spp.data <- 	'n'
 do.models <- 	'n'
-do.prediction <-'y'
-do.nass <-		'y'
-do.landsat <-	'y'
+do.prediction <-'n'
+do.nass <-		'n'
+do.landsat <-	'n'
 
 # Define inputs and file paths
-data.yrs <- 2009 # c(2007, 2009)
-days <- 156 # c(215,156)
-survey.yrs <- c(1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012) # c(2007,2009)
-radius <- c(100,500) # c(100, 1000) # c(100,500)
-bands <- seq(1,7,1)
+data.yrs <- c(2006,2007,2009,2010,2011) # 2009 # c(2007, 2009)
+days <- c(164,167,156,175,194) # 156 # c(215,156)
+survey.yrs <- data.yrs # c(1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012) # c(2007,2009)
+radius <- c(100,1000) # c(100, 1000) # c(100,500)
+bands <- c(1:5,7) # seq(1,7,1)
 nass.var <- c('water','herb.wetland','grass.hay','alfalfa.etc','dev.low','dev.high','decid.wood','wood.wetland','other')
 spp.names <- c('boboli','sedwre','henspa','easmea','graspa')
 
@@ -55,6 +55,7 @@ if (do.data.proc=='y')
 	source('landsat.focal.mean.r')
 	
 	# Atmospheric correction of landsat imagery and cloud extraction
+	# Run this independently with a source command setting up this file to reflect your file structure/names.
 	# source('landsat.processing.r')
 }
 # =================================================================
