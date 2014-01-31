@@ -10,12 +10,12 @@ source('mask.clouds.r')
 
 do.atmos <- 	'n'
 do.clouds <- 	'n'
-do.clean <- 	'y'
-do.shadows <- 	'y'
-do.mask <- 		'n'
+do.clean <- 	'n'
+do.shadows <- 	'n'
+do.mask <- 		'y'
 
-workspace <- 'D:/Chicago_Grasslands/LANDSAT2/'
-# workspace <- 'Z:/Chicago_Grasslands/LANDSAT2/'
+# workspace <- 'D:/Chicago_Grasslands/LANDSAT2/'
+workspace <- 'Z:/Chicago_Grasslands/LANDSAT2/'
 file.names <- c('lt50230312006164pac01','lt50230312007167pac01','lt50230312009156pac02','lt50230312010175EDC00','lt50230312011194pac01')
 
 cloud.shifts <- c(
@@ -32,7 +32,7 @@ colnames(shifts) <- c('year','x.shift','y.shift')
 min.cloud <- 56
 
 # for (n in 1:5)
-for (n in 1)
+for (n in 2:5)
 {
 	if (do.atmos=='y')
 	{
