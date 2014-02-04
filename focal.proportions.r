@@ -1,7 +1,7 @@
 library(raster)
-library(ncdf)
+# library(ncdf)
 
-workspace <- 'D:/Chicago_Grasslands/GIS/nass_layers/'
+workspace <- nass.path
 
 values <- list(
 	111, # water
@@ -54,7 +54,8 @@ for (n in 1:length(radius))
 		}
 		
 		# Remove all the temporary files for that year's calculations.  
-		file.remove(dir('c:/users/cwilsey/appdata/local/temp/r_raster_tmp/cwilsey',full.names=TRUE))
+		file.remove(dir('c:/users/cwilsey/appdata/local/temp/r_raster_cwilsey',full.names=TRUE))
+		# file.remove(dir('c:/users/cwilsey/appdata/local/temp/r_raster_tmp/cwilsey',full.names=TRUE))
 		# stop('cbw')
 	}
 }
