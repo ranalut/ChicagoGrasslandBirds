@@ -1,9 +1,17 @@
 library(raster)
 
-setwd('d:/github/chicagograsslandbirds/')
+# setwd('d:/github/chicagograsslandbirds/')
+setwd('z:/github/chicagograsslandbirds/')
 
-do.data.proc <- 'n' # See processing settings below.  Remove clouds (landsat.processing.r) before running.
-do.load.data <- 'y'
+# nass.path <- 'd:/chicago_grasslands/gis/nass_layers/'
+# landsat.path <- 'd:/chicago_grasslands/landsat2/'
+# output.path <- 'd:/chicago_grasslands/models/'
+nass.path <- 'z:/chicago_grasslands/gis/nass_layers/'
+landsat.path <- 'z:/chicago_grasslands/landsat2/'
+output.path <- 'z:/chicago_grasslands/models/'
+
+do.data.proc <- 'y' # See processing settings below.  Remove clouds (landsat.processing.r) before running.
+do.load.data <- 'n'
 do.spp.data <- 	'n'
 do.models <- 	'n'
 do.prediction <-'n'
@@ -14,23 +22,19 @@ do.landsat <-	'n'
 data.yrs <- c(2006,2007,2009,2010,2011) # 2009 # c(2007, 2009)
 days <- c(164,167,156,175,194) # 156 # c(215,156)
 survey.yrs <- data.yrs # c(1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012) # c(2007,2009)
-radius <- c(100,1000) # c(100, 1000) # c(100,500)
-bands <- c(1:5,7) # seq(1,7,1)
+radius <- c(100,500,1000) # c(100, 1000) # c(100,500)
+bands <- c(7,5) # c(1:5,7) # seq(1,7,1)
 nass.var <- c('water','herb.wetland','grass.hay','alfalfa.etc','dev.low','dev.high','decid.wood','wood.wetland','other')
 spp.names <- c('boboli','sedwre','henspa','easmea','graspa')
-
-nass.path <- 'd:/chicago_grasslands/gis/nass_layers/'
-landsat.path <- 'd:/chicago_grasslands/landsat2/'
-output.path <- 'd:/chicago_grasslands/models/'
 
 # Processing
 if (do.data.proc=='y')
 {
-	years <- c(2007,2009) # seq(2012,2006,-1)
-	days <- c(215,156)
-	code <- c('01','02')
-	bands <- seq(1,7,1)
-	folder.names <- paste('lt5023031',years,days,'PAC',code,sep='')
+	years <- 2008 # c(2006,2007,2009,2010,2011) # c(2007,2009) # seq(2012,2006,-1)
+	days <- 170 # c(164,167,156,175,194) # c(215,156)
+	code <- 'PAC01' # c('PAC01','PAC01','PAC02','EDC00','PAC01')
+	# bands <- c(1:5,7) # seq(1,7,1)
+	folder.names <- paste('lt5023031',years,days,code,sep='')
 }
 
 # Learning rates for BRTs
@@ -40,23 +44,24 @@ lr <- c(0.1,0.1,0.1,0.1,0.1)
 pred.year <- data.yrs[length(data.yrs)]
 pred.day <- days[length(days)]
 
-study.area.1 <- extent(matrix(c(593000,707000,2043000,2199000),ncol=2,byrow=TRUE)) # Could be wider.
-study.area.2 <- extent(matrix(c(350000,461000,4556000,4714000),ncol=2,byrow=TRUE)) # Could be wider.
+study.area.1 <- extent(matrix(c(593000,707000,2043000,2199000),ncol=2,byrow=TRUE))
+study.area.2 <- extent(matrix(c(345000,470000,4540000,4720000),ncol=2,byrow=TRUE))
 
 # ===============================================================
 # Step 1: Data Processing 
 if (do.data.proc=='y')
 {
-	radius <- 1000
+	# radius <- c(1000)
 	# Processing NASS data layers to extract percent cover measures at multiple spatial scales:
-	source('focal.proportions.r')
+	# source('focal.proportions.r')
 	
 	# Processing Landsat data layers to extract mean band values at multiple spatial scales:
+	source('focal.mean.fxns.r')
 	source('landsat.focal.mean.r')
 	
 	# Atmospheric correction of landsat imagery and cloud extraction
 	# Run this independently with a source command setting up this file to reflect your file structure/names.
-	# source('landsat.processing.r')
+	# # source('landsat.processing.r')
 }
 # =================================================================
 # Step 2: Load Data 
