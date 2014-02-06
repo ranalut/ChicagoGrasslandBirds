@@ -6,7 +6,7 @@ source('rm.na.pts.r') # Loads a function used below.
 source('closest.year.r')
 
 # Load all data
-all.data <- read.csv("D:/Chicago_Grasslands/BIRD_DATA/BCN/31qryBreeding_JGS_version.csv", header=TRUE)
+all.data <- read.csv(paste(drive,":/Chicago_Grasslands/BIRD_DATA/BCN/31qryBreeding_JGS_version.csv",sep=''), header=TRUE,stringsAsFactors=FALSE)
 obs <- all.data[all.data$VALID==1 & 
 				all.data$PROTOCOL_ID=="P21" & 
 				all.data$DURATION_HRS==0.08 &
@@ -19,6 +19,9 @@ counts <- aggregate(VALID ~ SUB_ID + JHOUR + JDATE + YEAR + LATITUDE + LONGITUDE
 
 nass.spp.data <- list()
 landsat.spp.data <- list()
+all.rows <- list()
+nass.rows <- list()
+landsat.rows <- list()
 
 for (i in 1:length(spp.names))
 {
@@ -50,18 +53,27 @@ for (i in 1:length(spp.names))
 		# print(colnames(landsat.spp.data[[i]])); stop('cbw')
 	}
 	
+	all.rows[[i]] <- seq(1,dim(nass.spp.data[[i]])[1],1)
+	cat('all data points...',length(all.rows[[i]]),'\n')
+	
 	# NASS
 	n.col <- dim(nass.spp.data[[i]])[2]
-	test <- apply(X=nass.spp.data[[i]][,(n.col-18):n.col],MAR=1,FUN=rm.na.pts)
-	nass.spp.data[[i]] <- nass.spp.data[[i]][test==FALSE,]
-	print(dim(nass.spp.data[[i]])) # print(colnames(nass.spp.data[[i]])); stop('cbw')
+	test <- apply(X=nass.spp.data[[i]],MAR=1,FUN=rm.na.pts)
+	# nass.spp.data[[i]] <- nass.spp.data[[i]][test==FALSE,]
+	# print(dim(nass.spp.data[[i]])) # print(colnames(nass.spp.data[[i]])); stop('cbw')
+	
+	nass.rows[[i]] <- all.rows[[i]][test==FALSE]
+	cat('nass data points...',length(nass.rows[[i]]),'\n')
 	
 	# Landsat
 	n.col <- dim(landsat.spp.data[[i]])[2]
-	test <- apply(X=landsat.spp.data[[i]][,(n.col-14):n.col],MAR=1,FUN=rm.na.pts)
-	landsat.spp.data[[i]] <- landsat.spp.data[[i]][test==FALSE,]
-	print(dim(landsat.spp.data[[i]])) # print(colnames(landsat.spp.data[[i]])); stop('cbw')
+	test <- apply(X=landsat.spp.data[[i]],MAR=1,FUN=rm.na.pts)
+	# landsat.spp.data[[i]] <- landsat.spp.data[[i]][test==FALSE,]
+	# print(dim(landsat.spp.data[[i]])) # print(colnames(landsat.spp.data[[i]])); stop('cbw')
 	# stop('cbw')
+	
+	landsat.rows[[i]] <- all.rows[[i]][test==FALSE]
+	cat('landsat data points...',length(landsat.rows[[i]]),'\n')
 }
 
 # ========================================================
