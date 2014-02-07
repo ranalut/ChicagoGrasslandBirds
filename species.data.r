@@ -59,6 +59,9 @@ for (i in 1:length(spp.names))
 	# NASS
 	n.col <- dim(nass.spp.data[[i]])[2]
 	test <- apply(X=nass.spp.data[[i]],MAR=1,FUN=rm.na.pts)
+	# temp <- cbind(test,nass.spp.data[[i]])
+	# write.csv(temp,paste(output.path,'nass.test.csv',sep=''))
+	# stop('cbw')
 	# nass.spp.data[[i]] <- nass.spp.data[[i]][test==FALSE,]
 	# print(dim(nass.spp.data[[i]])) # print(colnames(nass.spp.data[[i]])); stop('cbw')
 	
