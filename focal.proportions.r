@@ -40,16 +40,7 @@ for (n in 1:length(radius))
 				next(j)
 			}
 			
-			# Rescore to binary raster
-			r.binary <- r.temp
-			the.test <- r.binary %in% values[[j]]
-			r.binary[the.test==FALSE] <- 0
-			r.binary[the.test==TRUE] <- 1
-			# plot(r.binary)
-			w.matrix <- focalWeight(x=r.temp, d=radius[n], type='circle')
-			focal.prop <- focal(r.binary, w=w.matrix) # , pad=TRUE, padValue=0)
-			# plot(focal.prop, main=paste(years[i],nass.var[j]))
-			writeRaster(focal.prop, paste(workspace,years[i],'_',nass.var[j],'_nass_30m_r',radius[n],'.tif',sep=''),overwrite=TRUE)
+			calc.focal.prop(nass.map=r.temp, class.vector=values[[j]], the.radius=radius[n], workspace=workspace, the.year=years[i], the.nass.var=nass.var[j])
 			cat('year',years[i],'variable',nass.var[j],Sys.time()-startTime,'\n')
 			# stop('cbw')
 		}
