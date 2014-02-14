@@ -10,10 +10,6 @@ library(tcltk2)
 if (do.nass=='y')
 {
 	nass.models <- list()
-	nass.dev.exp.cv <- NA
-	nass.dev.exp.test <- NA
-	nass.cor.cv <- NA
-	nass.cor.test <- NA
 	
 	for (i in 1:length(nass.spp.data))
 	{
@@ -23,10 +19,6 @@ if (do.nass=='y')
 		cat('points considered...',dim(the.data)[1],'\n')
 		nass.models[[i]] <- gbm.step(data=the.data, gbm.x=c(4:5,9:26), gbm.y=6, family="poisson", tree.complexity=5, learning.rate=lr[i], bag.fraction=0.5)
 		
-		evaluation <- model.eval(the.model=nass.models[[i]], covariates=nass.spp.data[[i]][,c(4:5,9:26)], test.rows=test.rows, obs=nass.spp.data[[i]][,6], spp=spp.names[i])
-		
-		nass.dev.exp.cv[i] <- evaluation[[1]]; nass.dev.exp.test[i] <- evaluation[[2]]
-		nass.cor.cv[i] <- evaluation[[3]]; nass.cor.test[i] <- evaluation[[4]]
 		cat('\nend nass',spp,'############################\n')
 	}
 }
@@ -35,10 +27,6 @@ if (do.nass=='y')
 if (do.landsat=='y')
 {
 	landsat.models <- list()
-	landsat.dev.exp.cv <- NA
-	landsat.dev.exp.test <- NA
-	landsat.cor.cv <- NA
-	landsat.cor.test <- NA
 	
 	for (i in 1:length(landsat.spp.data))
 	{
@@ -48,10 +36,6 @@ if (do.landsat=='y')
 		cat('points considered...',dim(the.data)[1],'\n')
 		landsat.models[[i]] <- gbm.step(data=the.data, gbm.x=c(4:5,9:20), gbm.y=6, family="poisson", tree.complexity=5, learning.rate=lr[i], bag.fraction=0.5)
 		
-		evaluation <- model.eval(the.model=landsat.models[[i]], covariates=landsat.spp.data[[i]][,c(4:5,9:20)], test.rows=test.rows, obs=landsat.spp.data[[i]][,6], spp=spp.names[i])
-		
-		landsat.dev.exp.cv[i] <- evaluation[[1]]; landsat.dev.exp.test[i] <- evaluation[[2]]
-		landsat.cor.cv[i] <- evaluation[[3]]; landsat.cor.test[i] <- evaluation[[4]]
 		cat('\nend landsat',spp,'############################\n')
 	}
 }
