@@ -1,10 +1,11 @@
 
 
+
 calc.focal.prop <- function(nass.map, class.vector, the.radius, workspace, the.year, the.nass.var)
 # calc.focal.prop <- function(nass.map=r.temp, class.vector=values[[j]], the.radius=radius[n], workspace=workspace, the.year=years[i], the.nass.var=nass.var[j])
 {
 	r.binary <- nass.map
-	the.test <- r.binary %in% class.vector
+	the.test <- r.binary %in% class.vector # Or, consider layerize.
 	r.binary[the.test==FALSE] <- 0
 	r.binary[the.test==TRUE] <- 1
 	# plot(r.binary)
