@@ -11,9 +11,11 @@ import arcpy
 
 
 # Local variables:
-boboli_nass_v6_tif = "boboli.nass.v6.tif"
-boboli_nass_v6_kmz = "D:\\Chicago_Grasslands\\MAPS\\boboli.nass.v6.kmz"
+dir = "Z" # "D"
+input.tif = dir + ":\\Chicago_Grasslands\\MODELS\\boboli.landsat.v6.tif"
+output.kmz = dir + ":\\Chicago_Grasslands\\MAPS\\boboli.landsat.v6-3.kmz"
 
 # Process: Layer To KML
-arcpy.LayerToKML_conversion(boboli_nass_v6_tif, boboli_nass_v6_kmz, "1", "true", "DEFAULT", "1024", "96", "CLAMPED_TO_GROUND")
+arcpy.LayerToKML_conversion(input.tiff, output.kmz, "1", "true", "DEFAULT", "8192", "96", "CLAMPED_TO_GROUND")
 
+# source('C:/Python27/ArcGIS10.2/python.exe z:/github/chicagograsslandbirds/raster.2.kml.py')
