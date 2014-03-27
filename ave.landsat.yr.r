@@ -13,7 +13,7 @@ for (i in 1:length(bands))
 		temp <- stack(landsat.file.names)
 		temp <- crop(temp, study.area.2)
 		print(temp)
-		the.mean <- calc(temp, fun=mean, na.rm=TRUE, filename=paste(landsat.path,'20XX','_clean_d','XXX','_b',bands[i],'_r',radius[j],'.tif',sep=''),overwrite=TRUE)
+		the.mean <- calc(temp, fun=mean, na.rm=TRUE, filename=paste(landsat.path,'20YY','_clean_d','YYY','_b',bands[i],'_r',radius[j],'.tif',sep=''),overwrite=TRUE)
 		print(the.mean)
 		# stop('cbw')
 	}
