@@ -1,6 +1,6 @@
 library(raster)
 
-drive <- 'z' # 'd' # 'z'
+drive <- 'd' # 'd' # 'z'
 
 setwd(paste(drive,':/github/chicagograsslandbirds/',sep=''))
 
@@ -8,35 +8,35 @@ nass.path <- paste(drive,':/chicago_grasslands/gis/nass_layers/',sep='')
 landsat.path <- paste(drive,':/chicago_grasslands/landsat2/',sep='')
 output.path <- paste(drive,':/chicago_grasslands/models/',sep='')
 
-do.data.proc <- 'n' # See processing settings below.  Remove clouds (landsat.processing.r) before running.
+do.data.proc <- 'y' # See processing settings below.  Remove clouds (landsat.processing.r) before running.
 do.load.data <- 'n'
 do.spp.data <- 	'n'
 do.test.data <- 'n' # DO NOT OVERWRITE. Change output name below if turned on.
 do.models <- 	'n'
 do.eval <- 		'n'
-do.prediction <-'y'
+do.prediction <-'n'
 do.nass <-		'n'
-do.landsat <-	'y'
+do.landsat <-	'n'
 do.kd <- 		'n'
 
 # Define inputs and file paths
 radius <- c(100,1000) # c(100,500,1000) # c(100, 1000) # c(100,500)
-data.yrs <- c(2009,2010,2011) # c(2007,2008,2009,2010,2011) # 2006 # 2009 # c(2007, 2009)
-days <- c(156,175,194) # c(167,170,156,175,194) # 164 # 156 # c(215,156)
+data.yrs <- c(2007,2008,2009,2010,2011) # c(2007,2008,2009,2010,2011) # 2006 # 2009 # c(2007, 2009)
+days <- c(167,170,156,175,194) # c(156,175,194) # c(167,170,156,175,194) # 164 # 156 # c(215,156)
 survey.yrs <- data.yrs # c(1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012) # c(2007,2009)
 bands <- c(1:5,7) # c(7,5) # seq(1,7,1)
-nass.var <- c('water','herb.wetland','grass.hay','alfalfa.etc','dev.low','dev.high','decid.wood','wood.wetland','other')
+nass.var <- c('corn','soy','wheat','other.crops','water','herb.wetland','grass.hay','alfalfa.etc','dev.low','dev.high','decid.wood','other.wood','wood.wetland','other')
 spp.names <- c('boboli','sedwre','henspa','easmea','graspa')
 
 # For single year or single radius processing
-if (do.data.proc=='y')
-{
-	years <- 2008 # c(2006,2007,2009,2010,2011) # c(2007,2009) # seq(2012,2006,-1)
-	days <- 170 # c(164,167,156,175,194) # c(215,156)
-	code <- 'PAC01' # c('PAC01','PAC01','PAC02','EDC00','PAC01')
-	# bands <- c(1:5,7) # seq(1,7,1)
-	folder.names <- paste('lt5023031',years,days,code,sep='')
-}
+# if (do.data.proc=='y')
+# {
+	# years <- 2008 # c(2006,2007,2009,2010,2011) # c(2007,2009) # seq(2012,2006,-1)
+	# days <- 170 # c(164,167,156,175,194) # c(215,156)
+	# code <- 'PAC01' # c('PAC01','PAC01','PAC02','EDC00','PAC01')
+	# # bands <- c(1:5,7) # seq(1,7,1)
+	# folder.names <- paste('lt5023031',years,days,code,sep='')
+# }
 
 # Learning rates for BRTs
 lr <- c(0.1,0.005,0.01,0.01,0.01)
