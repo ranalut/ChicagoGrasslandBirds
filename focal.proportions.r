@@ -2,7 +2,7 @@ library(raster)
 # library(ncdf)
 
 workspace <- nass.path
-rasterOptions(tmpdir='C:/Users/cwilsey/AppData/Local/Temp/R_raster_cwilsey3/')
+rasterOptions(tmpdir='C:/Users/cwilsey/AppData/Local/Temp/R_raster_cwilsey1/')
 
 values <- list(
 	c(1,225,226,237), # Corn
@@ -52,7 +52,7 @@ for (n in 1:length(radius))
 		}
 		
 		# Remove all the temporary files for that year's calculations.  
-		file.remove(dir('c:/users/cwilsey/appdata/local/temp/r_raster_cwilsey3',full.names=TRUE))
+		file.remove(dir('c:/users/cwilsey/appdata/local/temp/r_raster_cwilsey1',full.names=TRUE))
 		# file.remove(dir('c:/users/cwilsey/appdata/local/temp/r_raster_tmp/cwilsey',full.names=TRUE))
 		# stop('cbw')
 	}
