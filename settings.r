@@ -29,14 +29,14 @@ nass.var <- c('corn','soy','wheat','other.crops','water','herb.wetland','grass.h
 spp.names <- c('boboli','sedwre','henspa','easmea','graspa')
 
 # For single year or single radius processing
-# if (do.data.proc=='y')
-# {
-	# years <- 2008 # c(2006,2007,2009,2010,2011) # c(2007,2009) # seq(2012,2006,-1)
+if (do.data.proc=='y')
+{
+	years <- data.yrs # 2008 # c(2006,2007,2009,2010,2011) # c(2007,2009) # seq(2012,2006,-1)
 	# days <- 170 # c(164,167,156,175,194) # c(215,156)
 	# code <- 'PAC01' # c('PAC01','PAC01','PAC02','EDC00','PAC01')
-	# # bands <- c(1:5,7) # seq(1,7,1)
+	# bands <- c(1:5,7) # seq(1,7,1)
 	# folder.names <- paste('lt5023031',years,days,code,sep='')
-# }
+}
 
 # Learning rates for BRTs
 lr <- c(0.1,0.005,0.01,0.01,0.01)
