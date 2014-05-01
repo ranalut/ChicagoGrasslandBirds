@@ -1,20 +1,26 @@
-
+library(xlsx)
 # Loading CTAP data
 source('rm.na.pts.r')
 
-workspace <- 'Z:/Chicago_Grasslands/BIRD_DATA/Val/'
+# workspace <- 'Z:/Chicago_Grasslands/BIRD_DATA/Val/'
+workspace <- "C:/Users/cwilsey/Dropbox/Grassland Bird Project/"
 
-old <- read.csv(paste(workspace,'ctap_older_CW.csv',sep=''),header=TRUE)
-last.row <- match("", old$County) - 1
-old <- old[1:last.row,c("SiteID","LatDD","LongDD","County","Habitat","CTAPcomm","BYear","Type","Minutes","Species","Dist","BMonth","BDay","NumOfVisit")]
-# hist(old$Dist,breaks=50)
-# print(old[old$Dist>75,])
-old <- old[old$Dist>75,]
-old <- old[,-11]
+old <- read.csv(paste(workspace,'ctap_older_CW.csv',sep=''),header=TRUE, stringsAsFactors=FALSE)
+# old <- read.xlsx2(paste(workspace,'ctap_older_CW.xlsx',sep=''),sheetIndex=1)
 
-new <- read.csv(paste(workspace,'ctap_recent_CW.csv',sep=''),header=TRUE)
-new <- new[,c("SiteID","LatDD","LongDD","County","Habitat","CTAPcomm","BYear","Type","Minutes","Species","BMonth","BDay","NumOfVisit")]
+# stop('cbw')
+# last.row <- match("", old$County) - 1
+# old <- old[1:last.row,c("SiteID","LatDD","LongDD","County","Habitat","CTAPcomm","BYear","Type","Minutes","Species","Dist","BMonth","BDay","NumOfVisit")]
+# # hist(old$Dist,breaks=50)
+# # print(old[old$Dist>75,])
+# old <- old[old$Dist>75,]
+# old <- old[,-11]
 
+new <- read.csv(paste(workspace,'ctap_newer_CW.csv',sep=''),header=TRUE, stringsAsFactors=FALSE)
+
+# new <- new[,c("SiteID","LatDD","LongDD","County","Habitat","CTAPcomm","BYear","Type","Minutes","Species","BMonth","BDay","NumOfVisit")]
+
+stop('cbw')
 ctap <- as.data.frame(rbind(old,new))
 # print(dim(ctap))
 # print(table(ctap$BYear))
