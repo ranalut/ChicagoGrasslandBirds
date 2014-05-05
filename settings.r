@@ -1,6 +1,6 @@
 library(raster)
 
-drive <- 'd' # 'd' # 'z'
+drive <- 'z' # 'd' # 'z'
 
 setwd(paste(drive,':/github/chicagograsslandbirds/',sep=''))
 
@@ -9,7 +9,7 @@ landsat.path <- paste(drive,':/chicago_grasslands/landsat2/',sep='')
 output.path <- paste(drive,':/chicago_grasslands/models/',sep='')
 
 do.data.proc <- 'n' # See processing settings below.  Remove clouds (landsat.processing.r) before running.
-do.load.data <- 'n'
+do.load.data <- 'y'
 do.spp.data <- 	'n'
 do.test.data <- 'n' # DO NOT OVERWRITE. Change output name below if turned on.
 do.models <- 	'n'
@@ -70,6 +70,12 @@ if (do.data.proc=='y')
 # Creates spatial points objects for the unique survey points in the BCN dataset
 if (do.load.data=='y')
 {
+	# Process other data types
+	# source('ctap.data.r')
+	# source('lake.county.r')
+	# source('will.county.r')
+	# Use ArcGIS to merge and export unique points to albers equal area and utm z16n projections.
+	
 	source('load.data.r') 
 	
 	# Version 1: 2007 & 2009
@@ -78,14 +84,15 @@ if (do.load.data=='y')
 	# Version 4: 2007:2011, 100, 500 radius, cloudless
 	# Version 5: 2007:2011, 100, 1000 radius, cloudless
 	# Version 6: 2007:2011, 500, 1000 radius, cloudless
-	save(nass.data,landsat.data,file=paste(output.path,'unique.point.data.v6.rdata',sep=''))
+	# Version 10: 2007:2011, 100, 1000 radius, cloudless, non-BCN data added
+	save(nass.data,landsat.data,file=paste(output.path,'unique.point.data.v10.rdata',sep=''))
 }
 # ===============================================================
 # Extract Species Data 
 # Generate datasets for each individual species pulling data for each survey year.
 if (do.spp.data=='y')
 {
-	# load(file=paste(output.path,'unique.point.data.v5.rdata',sep='')) # Check Step 2 for versions.
+	# load(file=paste(output.path,'unique.point.data.v10.rdata',sep='')) # Check above for versions.
 	
 	source('species.data.r') 
 	
@@ -95,7 +102,8 @@ if (do.spp.data=='y')
 	# Version 4: 2007:2011, 100, 500 radius, cloudless
 	# Version 5: 2007:2011, 100, 1000 radius, cloudless
 	# Version 6: 2007:2011, 500, 1000 radius, cloudless
-	save(nass.spp.data,landsat.spp.data,nass.rows,landsat.rows,file=paste(output.path,'species.data.v6.rdata',sep='')) 
+	# Version 10: 2007:2011, 100, 1000 radius, cloudless, non-BCN data added
+	save(nass.spp.data,landsat.spp.data,nass.rows,landsat.rows,file=paste(output.path,'species.data.v10.rdata',sep='')) 
 }
 # ===============================================================
 # Test Data
