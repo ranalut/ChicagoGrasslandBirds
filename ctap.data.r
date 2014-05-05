@@ -38,7 +38,7 @@ lake.spp <- c('BOBO','EAME','GRSP','HESP','SEWR')
 eBird.spp <- c('boboli','easmea','graspa','henspa','sedwre')
 
 spp.counts <- spp.counts[spp.counts$Species %in% lake.spp,]
-colnames(spp.counts) <- c("SiteID","LATITUDE","LONGITUDE","Habitat","BDay","BMonth","BYear","BTime","SPECIES_CODE","Count")
+colnames(spp.counts) <- c("SiteID","LATITUDE","LONGITUDE","Habitat","BDay","BMonth","BYear","BTime","SPECIES_CODE","HOW_MANY_ATLEAST")
 for (i in 1:length(lake.spp))
 {
   spp.counts$SPECIES_CODE <- gsub(pattern=lake.spp[i], replacement=eBird.spp[i], x=spp.counts$SPECIES_CODE)
@@ -48,4 +48,5 @@ spp.counts$JHOUR <- apply(spp.counts, 1, julian.hour, col.name='BTime')
 
 spp.counts$DATE <- paste(spp.counts$BMonth,spp.counts$BDay,spp.counts$BYear,sep='-')
 spp.counts$JDATE <- apply(spp.counts, 1, julian.table)
+spp.counts$YEAR <- spp.counts$BYear
 write.csv(spp.counts, paste(workspace,'obs.ctap_2007-11.csv',sep=''))
