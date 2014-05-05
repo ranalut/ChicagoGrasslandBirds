@@ -14,11 +14,21 @@ obs <- all.data[all.data$VALID==1 &
 print(dim(obs))
 
 counts <- aggregate(VALID ~ SUB_ID + JHOUR + JDATE + YEAR + LATITUDE + LONGITUDE, obs, length)
+# counts <- aggregate(VALID ~ JHOUR + JDATE + YEAR + LATITUDE + LONGITUDE, obs, length)
 
 # Non-BCN data
-ctap <- read.csv(paste(drive,":/Chicago_Grasslands/BIRD_DATA/Val/obs.ctap_2007-11.csv",sep=''), header=TRUE, stringsAsFactors=FALSE)
-lake <- read.csv(paste(drive,":/Chicago_Grasslands/BIRD_DATA/Val/lake.county.2007-2011.csv",sep=''), header=TRUE, stringsAsFactors=FALSE)
-will <- read.csv(paste(drive,":/Chicago_Grasslands/BIRD_DATA/Val/will.county.2007-2011.csv",sep=''), header=TRUE, stringsAsFactors=FALSE)
+ctap <- read.csv(paste(drive,":/Chicago_Grasslands/BIRD_DATA/Val/obs.ctap_2007-11.csv",sep=''), header=TRUE, stringsAsFactors=FALSE, row.names=1)
+lake <- read.csv(paste(drive,":/Chicago_Grasslands/BIRD_DATA/Val/lake.county.2007-2011.csv",sep=''), header=TRUE, stringsAsFactors=FALSE, row.names=1)
+will <- read.csv(paste(drive,":/Chicago_Grasslands/BIRD_DATA/Val/will.county.2007-2011.csv",sep=''), header=TRUE, stringsAsFactors=FALSE, row.names=1)
+target.columns <- c("JHOUR","JDATE","YEAR","LATITUDE","LONGITUDE","SPECIES_CODE","HOW_MANY_ATLEAST")
+non.bcn.data <- as.data.frame(
+						rbind(
+						ctap[,target.columns],
+						lake[,target.columns],
+						will[,target.columns]
+						))
+# stop('cbw')
+# all.data
 
 # select observations for species of interest
 nass.spp.data <- list()
@@ -40,7 +50,7 @@ for (i in 1:length(spp.names))
 		spp.obs.yr <- merge(spp.obs.yr, counts.yr, by=c("SUB_ID", "JHOUR", "JDATE", "LATITUDE", "LONGITUDE"), all=T)
 		test <- is.na(spp.obs.yr$HOW_MANY_ATLEAST)
 		spp.obs.yr$HOW_MANY_ATLEAST[test==TRUE] <- 0
-		# print(head(spp.obs.yr)); stop('cbw')
+		print(head(spp.obs.yr)); print(dim(spp.obs.yr)); stop('cbw')
 		
 		# Assign data yr
 		data.yr <- close.yr(x=survey.yrs[j],avail.yrs=data.yrs)
