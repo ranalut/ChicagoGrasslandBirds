@@ -40,4 +40,5 @@ for (i in 1:length(data.yrs))
 	landsat.data[[i]] <- data.frame(unique.pts.2@data,landsat.data[[i]])
 	# write.csv(landsat.data[[i]],paste(output.path,data.yrs[i],'.landsat.extract.csv',sep=''))
 	# stop('cbw')
+	cat(data.yrs[i],'\n')
 }

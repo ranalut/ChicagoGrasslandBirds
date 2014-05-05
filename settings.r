@@ -1,8 +1,8 @@
 library(raster)
 
-drive <- 'z' # 'd' # 'z'
+drive <- 'd' # 'd' # 'z'
 
-setwd(paste(drive,':/github/chicagograsslandbirds/',sep=''))
+# setwd(paste(drive,':/github/chicagograsslandbirds/',sep=''))
 
 nass.path <- paste(drive,':/chicago_grasslands/gis/nass_layers/',sep='')
 landsat.path <- paste(drive,':/chicago_grasslands/landsat2/',sep='')
