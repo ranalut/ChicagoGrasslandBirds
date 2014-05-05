@@ -5,8 +5,8 @@ source('julian.hour.r')
 julian.table <- function(x) { julian(as.Date(x['DATE'],format="%m-%d-%Y"), origin = as.Date(paste(x['BYear'],"-01-01",sep=''))) }
 
 
-# workspace <- 'Z:/Chicago_Grasslands/BIRD_DATA/Val/'
-workspace <- "C:/Users/cwilsey/Dropbox/Grassland Bird Project/"
+workspace <- 'Z:/Chicago_Grasslands/BIRD_DATA/Val/'
+# workspace <- "C:/Users/cwilsey/Dropbox/Grassland Bird Project/"
 
 old <- read.csv(paste(workspace,'ctap_1997-2010.csv',sep=''),header=TRUE, stringsAsFactors=FALSE)
 old <- old[,c("SiteID","LatDD","LongDD","County","Habitat","CTAPcomm","BYear","Type","Minutes","Species","BMonth","BDay","BTime","NumOfVisit")]
@@ -30,6 +30,7 @@ spp.counts <- aggregate(Count ~ SiteID + LatDD + LongDD + Habitat + BDay + BMont
 
 unique.pts <- aggregate(Species ~ SiteID + LatDD + LongDD, spp.counts, length)
 # print(unique.pts)
+colnames(unique.pts) <- c('SiteID','LATITUDE','LONGITUDE','SPECIES_CODE')
 write.csv(unique.pts, paste(workspace,'pts.ctap_2007-11.csv',sep=''))
 
 
@@ -37,7 +38,7 @@ lake.spp <- c('BOBO','EAME','GRSP','HESP','SEWR')
 eBird.spp <- c('boboli','easmea','graspa','henspa','sedwre')
 
 spp.counts <- spp.counts[spp.counts$Species %in% lake.spp,]
-colnames(spp.counts) <- c("SiteID","LatDD","LongDD","Habitat","BDay","BMonth","BYear","BTime","SPECIES_CODE","Count")
+colnames(spp.counts) <- c("SiteID","LATITUDE","LONGITUDE","Habitat","BDay","BMonth","BYear","BTime","SPECIES_CODE","Count")
 for (i in 1:length(lake.spp))
 {
   spp.counts$SPECIES_CODE <- gsub(pattern=lake.spp[i], replacement=eBird.spp[i], x=spp.counts$SPECIES_CODE)

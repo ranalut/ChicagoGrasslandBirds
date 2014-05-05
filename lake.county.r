@@ -1,6 +1,8 @@
 # Lake County Data
 
-workspace <- "C:/Users/cwilsey/Dropbox/Grassland Bird Project/"
+# workspace <- "C:/Users/cwilsey/Dropbox/Grassland Bird Project/"
+workspace <- 'z:/chicago_grasslands/bird_data/val/'
+
 source('julian.hour.r')
 julian.table <- function(x) { julian(as.Date(x['DATE'],format="%m/%d/%Y"), origin = as.Date(paste(x['YEAR'],"-01-01",sep=''))) }
 
