@@ -9,13 +9,15 @@ landsat.data <- list()
 
 # Load the unique points for model building
 # Albers equal area
-unique.pts <- readOGR(dsn=paste(drive,':/Chicago_Grasslands/BIRD_DATA/BCN',sep=''),layer='unique_pts_albers_v2',encoding='ESRI Shapefile')
+unique.pts <- readOGR(dsn=paste(drive,':/Chicago_Grasslands/BIRD_DATA/Val',sep=''),layer='all_unique_5may14_albers',encoding='ESRI Shapefile')
 print(unique.pts)
-unique.pts@data <- unique.pts@data[,30:39]
+# unique.pts@data <- unique.pts@data[,30:39]
+
 # UTM zone 16N
-unique.pts.2 <- readOGR(dsn=paste(drive,':/Chicago_Grasslands/BIRD_DATA/BCN',sep=''),layer='unique_pts_utm16n_v2',encoding='ESRI Shapefile')
+unique.pts.2 <- readOGR(dsn=paste(drive,':/Chicago_Grasslands/BIRD_DATA/Val',sep=''),layer='all_unique_5may14_albers',encoding='ESRI Shapefile')
 print(unique.pts.2)
-unique.pts.2@data <- unique.pts.2@data[,30:39]
+# unique.pts.2@data <- unique.pts.2@data[,30:39]
+# stop('cbw')
 
 for (i in 1:length(data.yrs))
 {
