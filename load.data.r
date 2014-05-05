@@ -14,7 +14,7 @@ print(unique.pts)
 # unique.pts@data <- unique.pts@data[,30:39]
 
 # UTM zone 16N
-unique.pts.2 <- readOGR(dsn=paste(drive,':/Chicago_Grasslands/BIRD_DATA/Val',sep=''),layer='all_unique_5may14_albers',encoding='ESRI Shapefile')
+unique.pts.2 <- readOGR(dsn=paste(drive,':/Chicago_Grasslands/BIRD_DATA/Val',sep=''),layer='all_unique_5may14_utm16n',encoding='ESRI Shapefile')
 print(unique.pts.2)
 # unique.pts.2@data <- unique.pts.2@data[,30:39]
 # stop('cbw')
