@@ -5,7 +5,7 @@ library(sp)
 source('rm.na.pts.r') # Loads a function used below.
 source('closest.year.r')
 
-# Load all data
+# Load BCN data
 all.data <- read.csv(paste(drive,":/Chicago_Grasslands/BIRD_DATA/BCN/31qryBreeding_JGS_version.csv",sep=''), header=TRUE,stringsAsFactors=FALSE)
 obs <- all.data[all.data$VALID==1 & 
 				all.data$PROTOCOL_ID=="P21" & 
@@ -15,8 +15,12 @@ print(dim(obs))
 
 counts <- aggregate(VALID ~ SUB_ID + JHOUR + JDATE + YEAR + LATITUDE + LONGITUDE, obs, length)
 
-# select observations for species of interest
+# Non-BCN data
+ctap <- read.csv(paste(drive,":/Chicago_Grasslands/BIRD_DATA/Val/obs.ctap_2007-11.csv",sep=''), header=TRUE, stringsAsFactors=FALSE)
+lake <- read.csv(paste(drive,":/Chicago_Grasslands/BIRD_DATA/Val/lake.county.2007-2011.csv",sep=''), header=TRUE, stringsAsFactors=FALSE)
+will <- read.csv(paste(drive,":/Chicago_Grasslands/BIRD_DATA/Val/will.county.2007-2011.csv",sep=''), header=TRUE, stringsAsFactors=FALSE)
 
+# select observations for species of interest
 nass.spp.data <- list()
 landsat.spp.data <- list()
 all.rows <- list()
