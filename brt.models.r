@@ -17,9 +17,9 @@ if (do.nass=='y')
 		the.data <- nass.spp.data[[i]][nass.rows[[i]],]
 		cat('\nnstart nass',spp.names[i],'\n')
 		cat('points considered...',dim(the.data)[1],'\n')
-		nass.models[[i]] <- gbm.step(data=the.data, gbm.x=c(4:5,9:26), gbm.y=6, family="poisson", tree.complexity=5, learning.rate=lr[i], bag.fraction=0.5)
+		nass.models[[i]] <- gbm.step(data=the.data, gbm.x=c(4:5,9:36), gbm.y=6, family="poisson", tree.complexity=5, learning.rate=lr[i], bag.fraction=0.5)
 		
-		cat('\nend nass',spp,'############################\n')
+		cat('\nend nass',spp.names[i],'############################\n')
 	}
 }
 
@@ -36,7 +36,7 @@ if (do.landsat=='y')
 		cat('points considered...',dim(the.data)[1],'\n')
 		landsat.models[[i]] <- gbm.step(data=the.data, gbm.x=c(4:5,9:20), gbm.y=6, family="poisson", tree.complexity=5, learning.rate=lr[i], bag.fraction=0.5)
 		
-		cat('\nend landsat',spp,'############################\n')
+		cat('\nend landsat',spp.names[i],'############################\n')
 	}
 }
 
