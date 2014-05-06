@@ -10,13 +10,13 @@ output.path <- paste(drive,':/chicago_grasslands/models/',sep='')
 
 do.data.proc <- 'n' # See processing settings below.  Remove clouds (landsat.processing.r) before running.
 do.load.data <- 'n'
-do.spp.data <- 	'y'
+do.spp.data <- 	'n'
 do.test.data <- 'n' # DO NOT OVERWRITE. Change output name below if turned on.
-do.models <- 	'n'
+do.models <- 	'y'
 do.eval <- 		'n'
 do.prediction <-'n'
-do.nass <-		'n'
-do.landsat <-	'n'
+do.nass <-		'y'
+do.landsat <-	'y'
 do.kd <- 		'n'
 
 # Define inputs and file paths
@@ -92,8 +92,9 @@ if (do.load.data=='y')
 # Generate datasets for each individual species pulling data for each survey year.
 if (do.spp.data=='y')
 {
-	# load(file=paste(output.path,'unique.point.data.v10.rdata',sep='')) # Check above for versions.
+	load(file=paste(output.path,'unique.point.data.v10.rdata',sep='')) # Check above for versions.
 	
+	count.file <- 'spp.pres.abs.v10.txt'
 	source('species.data.r') 
 	
 	# Version 1: 2007, 2009
@@ -110,16 +111,16 @@ if (do.spp.data=='y')
 if (do.test.data=='y')
 {
 	source('train.test.data.r')
-	load(file=paste(output.path,'species.data.v4.rdata',sep='')) # Could be any data
-	create.test.data(row.numbers=landsat.rows[[1]], proportion=0.2, file.name=paste(output.path,'test.rows.v1.txt',sep=''))
+	load(file=paste(output.path,'species.data.v10.rdata',sep='')) # Could be any data
+	create.test.data(row.numbers=landsat.rows[[1]], proportion=0.2, file.name=paste(output.path,'test.rows.v10.txt',sep=''))
 }
 # ===============================================================
 # Build Models 
 if (do.models=='y')
 {
 	# See above for versions.
-	load(file=paste(output.path,'species.data.v6.rdata',sep=''))
-	test.rows <- scan(file=paste(output.path,'test.rows.v1.txt',sep=''),what=numeric())
+	load(file=paste(output.path,'species.data.v10.rdata',sep=''))
+	test.rows <- scan(file=paste(output.path,'test.rows.v10.txt',sep=''),what=numeric())
 	
 	source('train.test.data.r')
 	source('deviance.explained.r')
@@ -130,15 +131,16 @@ if (do.models=='y')
 	# Version 5 2007:2011; 100, 500 radius; cloudless
 	# Version 6 2007:2011; 100, 1000 radius; cloudless
 	# Version 7 2007:2011; 500, 1000 radius; cloudless
-	if (do.nass=='y') { save(nass.models, file=paste(output.path,'nass.species.models.v7.rdata',sep='')) } 
-	if (do.landsat=='y') { save(landsat.models, file=paste(output.path,'landsat.species.models.v7.rdata',sep='')) } 
+	# Version 10: 2007:2011, 100, 1000 radius, cloudless, non-BCN data added
+	if (do.nass=='y') { save(nass.models, file=paste(output.path,'nass.species.models.v10.rdata',sep='')) } 
+	if (do.landsat=='y') { save(landsat.models, file=paste(output.path,'landsat.species.models.v10.rdata',sep='')) } 
 }
 # ================================================================
 if (do.eval=='y')
 {
-	load(file=paste(output.path,'species.data.v4.rdata',sep=''))
-	test.rows <- scan(file=paste(output.path,'test.rows.v1.txt',sep=''),what=numeric())
-	ver <- 5 # Version
+	load(file=paste(output.path,'species.data.v10.rdata',sep=''))
+	test.rows <- scan(file=paste(output.path,'test.rows.v10.txt',sep=''),what=numeric())
+	ver <- 10 # Version
 	load(file=paste(output.path,'nass.species.models.v',ver,'.rdata',sep=''))
 	load(file=paste(output.path,'landsat.species.models.v',ver,'.rdata',sep=''))
 	
