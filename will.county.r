@@ -14,20 +14,22 @@ will.pts$LONGITUDE <- -1*apply(will.pts[,7:9],1,to.dd)
 will.data <- read.csv(paste(workspace,'CW 2007-2011 Bird Data_with survey times.csv',sep=''),header=TRUE, stringsAsFactors=FALSE)
 will.data <- merge(will.data,will.pts[,c('POINT','LATITUDE','LONGITUDE')])
 print(dim(will.data))
-# print(colnames(will.data)); stop('cbw')
+# print(colnames(will.data)); print(head(will.data)); stop('cbw')
 
 will.data.2 <- data.frame(matrix(rep(NA,9),ncol=9))
 colnames(will.data.2) <- c('POINT','SITE','DATE','YEAR','TIME','LATITUDE','LONGITUDE','SPECIES_CODE','HOW_MANY_ATLEAST')
 ebird.names <- c('boboli','easmea','graspa','henspa','sedwre')
+will.names <- c('BOBO','EAME','GRSP','HESP','SEWR')
 
 for (i in seq(1,dim(will.data)[1],1))
 {
-	for (j in 5:9)
+	for (j in 1:5)
 	{
-		temp <- c(will.data[i,c(1:5,11:12)],ebird.names[(j-4)],will.data[i,j]) # ; print(temp)
+		temp <- c(will.data[i,c('POINT','SITE','DATE','YEAR','TIME','LATITUDE','LONGITUDE')],ebird.names[j],will.data[i,will.names[j]]); print(temp)
 		names(temp) <- c('POINT','SITE','DATE','YEAR','TIME','LATITUDE','LONGITUDE','SPECIES_CODE','HOW_MANY_ATLEAST')
 		will.data.2 <- rbind(will.data.2,temp)
 	}
+	# print(will.data.2); stop('cbw')
 }
 will.data.2 <- will.data.2[-1,]
 will.data.2$DATE2 <- paste(0,will.data.2$DATE,will.data.2$YEAR,sep='')
