@@ -1,5 +1,10 @@
 library(raster)
 
+# To Do:
+# Should we use the maximum observation of birds for any point in any year?  This could be done with an additional aggregate statement where we use the max function.  It may improve model performance by eliminating redundant observations.
+# Get more Landsat data and use more bird data.
+# Get additional CTAP data.
+
 drive <- 'z' # 'd' # 'z'
 
 # setwd(paste(drive,':/github/chicagograsslandbirds/',sep=''))
@@ -12,11 +17,11 @@ do.data.proc <- 'n' # See processing settings below.  Remove clouds (landsat.pro
 do.load.data <- 'n'
 do.spp.data <- 	'n'
 do.test.data <- 'n' # DO NOT OVERWRITE. Change output name below if turned on.
-do.models <- 	'y'
+do.models <- 	'n'
 do.eval <- 		'n'
-do.prediction <-'n'
+do.prediction <-'y'
 do.nass <-		'y'
-do.landsat <-	'y'
+do.landsat <-	'n'
 do.kd <- 		'n'
 
 # Define inputs and file paths
@@ -42,8 +47,9 @@ if (do.data.proc=='y')
 lr <- c(0.1,0.005,0.01,0.01,0.01)
 
 # For prediction
-pred.year <- '20YY' # '20XX' # 2010 # data.yrs[length(data.yrs)] '20XX' is based on mean for all years.  '20YY' is based on mean for last 3 years (2009-11).
-pred.day <- 'YYY' # 'YYY' # '175 # days[length(days)]
+# Prediction for Landcover is based on 2011.  Prediction for landsat is based on the 5-yr average ('XX').
+pred.year <- 2011 # '20XX' # 2010 # data.yrs[length(data.yrs)] '20XX' is based on mean for all years.  '20YY' is based on mean for last 3 years (2009-11). 5-yr average makes the most sense (notes 2/19/14).
+pred.day <- 194 # 'XXX' # 'YYY' # '175' # days[length(days)]
 
 study.area.1 <- extent(matrix(c(593000,707000,2043000,2199000),ncol=2,byrow=TRUE))
 study.area.2 <- extent(matrix(c(345000,470000,4540000,4720000),ncol=2,byrow=TRUE))
@@ -156,7 +162,7 @@ if (do.eval=='y')
 if (do.prediction=='y')
 {
 	radii <- list(c(100,1000)) # list(c(100,500),c(100,1000),c(500,1000))
-	versions <- '6c' # c(5,6,7) # If working with a version #b, need to copy and rename models rdata file.
+	versions <- '10' # c(5,6,7) # If working with a version #b, need to copy and rename models rdata file.
 	
 	for (tt in 1:length(versions))
 	{
@@ -177,6 +183,7 @@ if (do.prediction=='y')
 		# Version 6 2007:2011; 100, 1000 radius; cloudless
 		# Version 6b is projected landsat with 5-yr average.  6c is 3-yr average.
 		# Version 7 2007:2011; 500, 1000 radius; cloudless
+		# Version 10: 2007:2011, 100, 1000 radius, cloudless, non-BCN data added
 		if (do.nass=='y') { save(nass.pred, file=paste(output.path,'nass.pred.v',ver,'.rdata',sep='')) }
 		if (do.landsat=='y') { save(landsat.pred, file=paste(output.path,'landsat.pred.v',ver,'.rdata',sep='')) }
 	}

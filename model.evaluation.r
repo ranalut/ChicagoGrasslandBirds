@@ -15,11 +15,11 @@ nass.cor.test <- NA
 
 for (i in 1:length(nass.spp.data))
 {
-	evaluation <- model.eval(the.model=nass.models[[i]], covariates=nass.spp.data[[i]][,c(4:5,9:26)], test.rows=test.rows, obs=nass.spp.data[[i]][,6], spp=spp.names[i])
+	evaluation <- model.eval(the.model=nass.models[[i]], covariates=nass.spp.data[[i]][,c(4:5,9:36)], test.rows=test.rows, obs=nass.spp.data[[i]][,6], spp=spp.names[i])
 	
 	nass.dev.exp.cv[i] <- evaluation[[1]]; nass.dev.exp.test[i] <- evaluation[[2]]
 	nass.cor.cv[i] <- evaluation[[3]]; nass.cor.test[i] <- evaluation[[4]]
-	cat('\nend nass',spp.names[i],'############################\n')
+	cat('end nass',spp.names[i],'############################\n\n')
 }
 
 # Landsat models
@@ -35,6 +35,6 @@ for (i in 1:length(landsat.spp.data))
 	
 	landsat.dev.exp.cv[i] <- evaluation[[1]]; landsat.dev.exp.test[i] <- evaluation[[2]]
 	landsat.cor.cv[i] <- evaluation[[3]]; landsat.cor.test[i] <- evaluation[[4]]
-	cat('\nend landsat',spp.names[i],'############################\n')
+	cat('end landsat',spp.names[i],'############################\n\n')
 }
 
