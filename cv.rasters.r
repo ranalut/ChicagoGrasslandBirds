@@ -24,3 +24,5 @@ for (i in spp.names)
 }
 
 # (CellStatistics(["boboli.nass.v10.tif", "boboli.landsat.v10.tif"], "STD", "NODATA") / CellStatistics(["boboli.nass.v10.tif", "boboli.landsat.v10.tif"], "MEAN", "NODATA")) * 100
+
+# (("dist10km_5may" / 100) + "mean_cv_v10") / 2
