@@ -5,13 +5,10 @@ library(foreign)
 
 the.table <- read.dbf('Z:/Chicago_Grasslands/MAPS/fishnet_5km.dbf')
 
-the.letters <- paste(letters[1],letters[1],sep='')
-for (i in 2:5) { the.letters <- c(the.letters, paste(letters[i],letters[i],sep='')) }
-the.letters <- c(letters, the.letters)
-print(the.letters)
+the.letters <- LETTERS[1:23]
 
-the.labels <- paste(rep(seq(1,23,1),31),rev(the.letters),sep='')
+the.labels <- paste(rep(the.letters,31),rev(rep(seq(1,31,1),each=23)),sep='')
 print(the.labels)
-stop('cbw')
-
+#stop('cbw')
+the.table$LABELS <- the.labels
 write.dbf(the.table, 'Z:/Chicago_Grasslands/MAPS/fishnet_5km.dbf')
