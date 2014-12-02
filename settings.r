@@ -19,8 +19,8 @@ do.spp.data <- 	'n'
 do.test.data <- 'n' # DO NOT OVERWRITE. Change output name below if turned on.
 do.models <- 	'n'
 do.eval <- 		'n'
-do.prediction <-'y'
-do.nass <-		'y'
+do.prediction <-'n'
+do.nass <-		'n'
 do.landsat <-	'n'
 do.kd <- 		'n'
 
