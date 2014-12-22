@@ -27,7 +27,7 @@ spp.common.names <- c("Bobolink","Sedge Wren","Henslow's Sparrow","Eastern Meado
 
 # NASS
 cat('NASS models\n')
-for (i in 4) #1:length(spp.names))
+for (i in 1:length(spp.names))
 {
 	temp <- nass.blitz[[i]]
 	# print(head(temp))
@@ -42,7 +42,7 @@ for (i in 4) #1:length(spp.names))
 	temp <- temp[is.na(temp$pred)==FALSE,]
 	# temp$pred[temp$pred==0] <- 0.0001 # This inflates variability
 	temp <- temp[temp$pred>0,]
-	print(temp[,c('pred','Count')])
+	# print(temp[,c('pred','Count')])
 	
 	# This was to understand where the Inf are coming from.
 	# print(data.frame(temp$Count,temp$pred))
@@ -55,7 +55,8 @@ for (i in 4) #1:length(spp.names))
 	mn <- calc.deviance(obs=temp$Count, pred=rep(mean(temp$Count),dim(temp)[1]), family="poisson")
 	val <- calc.deviance(obs=temp$Count, pred=temp$pred, family="poisson")
 	dev.exp.test <- dsq(mean.null=mn, validation=val)
-	cat(spp.names[i],'presences',records,'deviance explained',dev.exp.test,'\n')
+	correlation <- cor(temp$Count,temp$pred)
+	cat(spp.names[i],'presences',records,'deviance explained',dev.exp.test,'correlation',correlation,'\n')
 	cat('mn',mn,'val',val,'\n')
 	# stop('cbw')
 }
@@ -63,7 +64,7 @@ for (i in 4) #1:length(spp.names))
 
 # LANDSAT
 cat('LandSat models\n')
-for (i in 4) # 1:length(spp.names))
+for (i in 1:length(spp.names))
 {
 	temp <- landsat.blitz[[i]]
 	# print(head(temp))
@@ -78,7 +79,7 @@ for (i in 4) # 1:length(spp.names))
 	# print(temp[,c('pred','Count')])
 	# temp$pred[temp$pred==0] <- 0.0001 # This inflates variability
 	temp <- temp[temp$pred>0,]
-	print(temp[,c('pred','Count')])
+	# print(temp[,c('pred','Count')])
 	
 	# print(data.frame(temp$Count,temp$pred))
 	# y_i <- temp$Count
@@ -90,7 +91,8 @@ for (i in 4) # 1:length(spp.names))
 	mn <- calc.deviance(obs=temp$Count, pred=rep(mean(temp$Count),dim(temp)[1]), family="poisson")
 	val <- calc.deviance(obs=temp$Count, pred=temp$pred, family="poisson")
 	dev.exp.test <- dsq(mean.null=mn, validation=val)
-	cat(spp.names[i],'presences',records,'deviance explained',dev.exp.test,'\n')
+	correlation <- cor(temp$Count,temp$pred)
+	cat(spp.names[i],'presences',records,'deviance explained',dev.exp.test,'correlation',correlation,'\n')
 	cat('mn',mn,'val',val,'\n')
 	# stop('cbw')
 }
