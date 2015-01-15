@@ -18,7 +18,7 @@ test <- apply(X=ctap,MARGIN=1,FUN=rm.na.pts) # Removes records without time stam
 # print(head(ctap[test==TRUE,]))
 ctap <- ctap[test==FALSE,]
 ctap <- ctap[
-	ctap$BYear >= 2007 & ctap$BYear <= 2011 & 
+	ctap$BYear >= 2007 & ctap$BYear <= 2013 & 
 	ctap$BMonth >=6 & ctap$BMonth <=7 & 
 	ctap$Minutes <= 5 &
 	ctap$Point=="CP",] # Use only CP points.
@@ -31,7 +31,7 @@ spp.counts <- aggregate(Num_Inds ~ SiteID + LatDD + LongDD + BDay + BMonth + BYe
 unique.pts <- aggregate(Species ~ SiteID + LatDD + LongDD, spp.counts, length)
 # print(unique.pts)
 colnames(unique.pts) <- c('SiteID','LATITUDE','LONGITUDE','SPECIES_CODE')
-write.csv(unique.pts, paste(workspace,'pts.ctap_2007-11.csv',sep=''))
+write.csv(unique.pts, paste(workspace,'pts.ctap_2007-13.csv',sep=''))
 
 lake.spp <- c('BOBO','EAME','GRSP','HESP','SEWR')
 eBird.spp <- c('boboli','easmea','graspa','henspa','sedwre')
@@ -48,4 +48,4 @@ spp.counts$JHOUR <- apply(spp.counts, 1, julian.hour, col.name='BTime')
 spp.counts$DATE <- paste(spp.counts$BMonth,spp.counts$BDay,spp.counts$BYear,sep='-')
 spp.counts$JDATE <- apply(spp.counts, 1, julian.table)
 spp.counts$YEAR <- spp.counts$BYear
-write.csv(spp.counts, paste(workspace,'obs.ctap_2007-11.csv',sep=''))
+write.csv(spp.counts, paste(workspace,'obs.ctap_2007-13.csv',sep=''))
