@@ -9,7 +9,7 @@ library(dismo)
 # source('2014.data.sample.r')
 
 # Observations
-obs.2014 <- read.csv('Z:/Chicago_Grasslands/BIRD_DATA/GrasslandBlitz2014Ebird/myebirddata.csv',stringsAsFactors=FALSE,header=TRUE)
+obs.2014 <- read.csv('Z:/Chicago_Grasslands/BIRD_DATA/GrasslandBlitz2014Ebird/myebirddata13jan15.csv',stringsAsFactors=FALSE,header=TRUE)
 
 # # target.columns <- c("SUB_ID","JHOUR","JDATE","YEAR","LATITUDE","LONGITUDE","SPECIES_CODE","HOW_MANY_ATLEAST","VALID")
 # obs.2014$VALID <- 1
@@ -30,18 +30,18 @@ cat('NASS models\n')
 for (i in 1:length(spp.names))
 {
 	temp <- nass.blitz[[i]]
-	# print(head(temp))
+	# print(head(temp)); stop('cbw')
 	temp.obs <- obs.2014[obs.2014$Common.Name==spp.common.names[i],]
 	records <- dim(temp.obs)[1]
 	# print(temp.obs[,c('Latitude','Longitude','Count')])
 	temp <- merge(temp,temp.obs[,c('Latitude','Longitude','Count')],by=c('Latitude','Longitude'),all.x=TRUE)
 	temp$Count[is.na(temp$Count)==TRUE] <- 0 # Assign zeros to points where none observed
 	# print(head(temp))
-	# print(temp[,c('pred','Count')])
+	# print(temp[,c('pred','Count')]); stop('cbw')
 	# print(temp[,c('Latitude','Longitude','Count','pred')])
 	temp <- temp[is.na(temp$pred)==FALSE,]
 	# temp$pred[temp$pred==0] <- 0.0001 # This inflates variability
-	temp <- temp[temp$pred>0,]
+	temp <- temp[temp$pred>0,] # predicted zeros can be dropped.
 	# print(temp[,c('pred','Count')])
 	
 	# This was to understand where the Inf are coming from.

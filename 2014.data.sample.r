@@ -9,15 +9,16 @@ landsat.blitz <- list()
 
 # Load the unique points 
 # Albers equal area
-unique.pts <- readOGR(dsn=paste(drive,':/Chicago_Grasslands/BIRD_DATA/GrasslandBlitz2014Ebird',sep=''),layer='unique_pts_2014_albers2',encoding='ESRI Shapefile')
+unique.pts <- readOGR(dsn=paste(drive,':/Chicago_Grasslands/BIRD_DATA/GrasslandBlitz2014Ebird',sep=''),layer='unique_pts_2014b_albers',encoding='ESRI Shapefile')
 print(unique.pts)
 
 # UTM zone 16N
-unique.pts.2 <- readOGR(dsn=paste(drive,':/Chicago_Grasslands/BIRD_DATA/GrasslandBlitz2014Ebird',sep=''),layer='unique_pts_2014_utm',encoding='ESRI Shapefile')
+unique.pts.2 <- readOGR(dsn=paste(drive,':/Chicago_Grasslands/BIRD_DATA/GrasslandBlitz2014Ebird',sep=''),layer='unique_pts_2014b_utm',encoding='ESRI Shapefile')
 print(unique.pts.2)
 # unique.pts.2@data <- unique.pts.2@data[,30:39]
 # stop('cbw')
 
+# Extract the predictions for NASS and Landsat models
 for (i in 1:length(spp.names))
 {
 	nass.file.names <- paste(drive,':/Chicago_Grasslands/models/',spp.names[i],'.nass.v10.tif',sep='')

@@ -5,7 +5,7 @@ library(raster)
 # Get more Landsat data and use more bird data.
 # Get additional CTAP data.
 
-drive <- 'd' # 'd' # 'z'
+drive <- 'z' # 'd' # 'z'
 
 # setwd(paste(drive,':/github/chicagograsslandbirds/',sep=''))
 
@@ -13,7 +13,7 @@ nass.path <- paste(drive,':/chicago_grasslands/gis/nass_layers/',sep='')
 landsat.path <- paste(drive,':/chicago_grasslands/landsat2/',sep='')
 output.path <- paste(drive,':/chicago_grasslands/models/',sep='')
 
-do.data.proc <- 'n' # See processing settings below.  Remove clouds (landsat.processing.r) before running.
+do.data.proc <- 'y' # See processing settings below.  Remove clouds (landsat.processing.r) before running.
 do.load.data <- 'n'
 do.spp.data <- 	'n'
 do.test.data <- 'n' # DO NOT OVERWRITE. Change output name below if turned on.
@@ -60,8 +60,11 @@ if (do.data.proc=='y')
 {
 	radius <- 1000
 	# Processing NASS data layers to extract percent cover measures at multiple spatial scales:
-	source('calc.focal.prop.r')
-	source('focal.proportions.r')
+	# source('calc.focal.prop.r')
+	# source('focal.proportions.r')
+	
+	source('calc.patch.r')
+	source('patch.size.r')
 	
 	# Processing Landsat data layers to extract mean band values at multiple spatial scales:
 	# source('focal.mean.fxns.r')
