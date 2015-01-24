@@ -5,7 +5,7 @@ library(raster)
 # Get more Landsat data and use more bird data.
 # Get additional CTAP data.
 
-drive <- 'z' # 'd' # 'z'
+drive <- 'd' # 'd' # 'z'
 
 # setwd(paste(drive,':/github/chicagograsslandbirds/',sep=''))
 
@@ -13,8 +13,8 @@ nass.path <- paste(drive,':/chicago_grasslands/gis/nass_layers/',sep='')
 landsat.path <- paste(drive,':/chicago_grasslands/landsat2/',sep='')
 output.path <- paste(drive,':/chicago_grasslands/models/',sep='')
 
-do.data.proc <- 'y' # See processing settings below.  Remove clouds (landsat.processing.r) before running.
-do.load.data <- 'n'
+do.data.proc <- 'n' # See processing settings below.  Remove clouds (landsat.processing.r) before running.
+do.load.data <- 'y'
 do.spp.data <- 	'n'
 do.test.data <- 'n' # DO NOT OVERWRITE. Change output name below if turned on.
 do.models <- 	'n'
@@ -25,12 +25,12 @@ do.landsat <-	'n'
 do.kd <- 		'n'
 
 # Define inputs and file paths
-radius <- c(100,1000) # c(100,500,1000) # c(100, 1000) # c(100,500)
-data.yrs <- c(2012,2013) # c(2007,2008,2009,2010,2011) # c(2007,2008,2009,2010,2011) # 2006 # 2009 # c(2007, 2009)
+radius <- 1000 # c(100,1000) # c(100,500,1000) # c(100, 1000) # c(100,500)
+data.yrs <- 2011 # c(2007,2008,2009,2010,2012,2013) # c(2012,2013) # c(2007,2008,2009,2010,2011) # c(2007,2008,2009,2010,2011) # 2006 # 2009 # c(2007, 2009)
 days <- c(167,170,156,175,194) # c(156,175,194) # c(167,170,156,175,194) # 164 # 156 # c(215,156)
 survey.yrs <- data.yrs # c(1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012) # c(2007,2009)
 bands <- c(1:5,7) # c(7,5) # seq(1,7,1)
-nass.var <- c('corn','soy','wheat','other.crops','water','herb.wetland','grass.hay','alfalfa.etc','dev.low','dev.high','decid.wood','other.wood','wood.wetland','other')
+nass.var <- c('corn','soy','wheat','other.crops','water','herb.wetland','grass.hay','alfalfa.etc','dev.low','dev.high','decid.wood','other.wood','wood.wetland') # ,'other') # remove errant other class that included grasslands.
 spp.names <- c('boboli','sedwre','henspa','easmea','graspa')
 
 # For single year or single radius processing
@@ -94,7 +94,8 @@ if (do.load.data=='y')
 	# Version 5: 2007:2011, 100, 1000 radius, cloudless
 	# Version 6: 2007:2011, 500, 1000 radius, cloudless
 	# Version 10: 2007:2011, 100, 1000 radius, cloudless, non-BCN data added
-	save(nass.data,landsat.data,file=paste(output.path,'unique.point.data.v10.rdata',sep=''))
+	# Version 11: 2011, 1000, LULC only
+	save(nass.data,landsat.data,file=paste(output.path,'unique.point.data.v11.rdata',sep=''))
 }
 # ===============================================================
 # Extract Species Data 
