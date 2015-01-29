@@ -14,7 +14,7 @@ landsat.path <- paste(drive,':/chicago_grasslands/landsat2/',sep='')
 output.path <- paste(drive,':/chicago_grasslands/models/',sep='')
 
 do.data.proc <- 'n' # See processing settings below.  Remove clouds (landsat.processing.r) before running.
-do.load.data <- 'y'
+do.load.data <- 'n'
 do.spp.data <- 	'n'
 do.test.data <- 'n' # DO NOT OVERWRITE. Change output name below if turned on.
 do.models <- 	'n'

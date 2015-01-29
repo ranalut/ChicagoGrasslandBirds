@@ -1,4 +1,4 @@
-# Will County Data
+# Will County Data, we were only given 2007-2011, Could we request 2012 and 2013?
 
 # workspace <- "C:/Users/cwilsey/Dropbox/Grassland Bird Project/"
 workspace <- 'z:/chicago_grasslands/bird_data/val/'

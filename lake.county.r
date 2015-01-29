@@ -1,7 +1,7 @@
 # Lake County Data
 
-workspace <- "C:/Users/cwilsey/Dropbox/Grassland Bird Project/"
-# workspace <- 'z:/chicago_grasslands/bird_data/val/'
+# workspace <- "C:/Users/cwilsey/Dropbox/Grassland Bird Project/"
+workspace <- 'd:/chicago_grasslands/bird_data/val/'
 
 source('julian.hour.r')
 julian.table <- function(x) { julian(as.Date(x['DATE'],format="%m/%d/%Y"), origin = as.Date(paste(x['YEAR'],"-01-01",sep=''))) }
@@ -14,7 +14,7 @@ temp <- as.Date(lake.data$DATE, format="%m/%d/%Y")
 lake.data$YEAR <- as.numeric(format(temp, format = "%Y")) 
 lake.data$JDATE <- apply(lake.data, 1, julian.table)
 lake.data$JHOUR <- apply(lake.data, 1, julian.hour) # rep(7,dim(lake.data)[1])
-lake.data <- lake.data[lake.data$YEAR %in% seq(2007,2013,1),]
+lake.data <- lake.data[lake.data$YEAR %in% seq(2007,2013,1),] # All Years.
 print(dim(lake.data))
 
 lake.spp <- c('BOBO','EAME','GRSP','HESP','SEWR')

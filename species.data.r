@@ -43,7 +43,7 @@ counts <- rbind(counts, non.bcn.counts) # 7368 counts included (some are repeat 
 obs <- rbind(obs, non.bcn.data) # 43448 species records (includes other spp).
 print(dim(counts))
 print(dim(obs))
-# stop('cbw')
+stop('cbw')
 
 # select observations for species of interest
 nass.spp.data <- list()
