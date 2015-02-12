@@ -4,6 +4,9 @@ library(sp)
 # source('settings.r')
 source('rm.na.pts.r') # Loads a function used below.
 source('closest.year.r')
+source('nass.lulc.classes.r')
+source('gridSample.max.r')
+source('grid.sample.r')
 
 # Load BCN data
 target.columns <- c("SUB_ID","JHOUR","JDATE","YEAR","LATITUDE","LONGITUDE","SPECIES_CODE","HOW_MANY_ATLEAST","VALID")
@@ -19,14 +22,19 @@ counts <- aggregate(VALID ~ SUB_ID + JHOUR + JDATE + YEAR + LATITUDE + LONGITUDE
 # counts <- aggregate(VALID ~ JHOUR + JDATE + YEAR + LATITUDE + LONGITUDE, obs, length)
 print(dim(counts))
 
+obs.2014 <- read.csv(paste(drive,':/Chicago_Grasslands/BIRD_DATA/GrasslandBlitz2014Ebird/myebirddata13jan15c.csv',sep=''),stringsAsFactors=FALSE,header=TRUE)
+
 # Non-BCN data, load and format to match BCN.
 target.columns <- c("JHOUR","JDATE","YEAR","LATITUDE","LONGITUDE","SPECIES_CODE","HOW_MANY_ATLEAST")
 ctap <- read.csv(paste(drive,":/Chicago_Grasslands/BIRD_DATA/Val/obs.ctap_2007-11.csv",sep=''), header=TRUE, stringsAsFactors=FALSE, row.names=1)
-lake <- read.csv(paste(drive,":/Chicago_Grasslands/BIRD_DATA/Val/lake.county.2007-2011.csv",sep=''), header=TRUE, stringsAsFactors=FALSE, row.names=1)
+ctap2012 <- read.csv(paste(drive,":/Chicago_Grasslands/BIRD_DATA/Val/obs.ctap.2012.csv",sep=''), header=TRUE, stringsAsFactors=FALSE, row.names=1)
+lake <- read.csv(paste(drive,":/Chicago_Grasslands/BIRD_DATA/Val/lake.county.2007-2013.csv",sep=''), header=TRUE, stringsAsFactors=FALSE, row.names=1)
 will <- read.csv(paste(drive,":/Chicago_Grasslands/BIRD_DATA/Val/will.county.2007-2011.csv",sep=''), header=TRUE, stringsAsFactors=FALSE, row.names=1)
 non.bcn.data <- as.data.frame(
 						rbind(
+						obs.2014[,target.columns],
 						ctap[,target.columns],
+						ctap2012[,target.columns],
 						lake[,target.columns],
 						will[,target.columns]
 						))
@@ -39,18 +47,21 @@ print(dim(non.bcn.counts))
 # stop('cbw')
 # all.data
 
-counts <- rbind(counts, non.bcn.counts) # 7368 counts included (some are repeat counts at same site).
-obs <- rbind(obs, non.bcn.data) # 43448 species records (includes other spp).
+counts <- rbind(counts, non.bcn.counts) # 8723 # 7368 counts included (some are repeat counts at same site).
+obs <- rbind(obs, non.bcn.data) # 52534 # 43448 species records (includes other spp).
 print(dim(counts))
 print(dim(obs))
-stop('cbw')
+
+write.csv(counts,paste(drive,':/Chicago_Grasslands/BIRD_DATA/all.counts.3feb14.csv',sep=''))
+write.csv(obs,paste(drive,':/Chicago_Grasslands/BIRD_DATA/all.obs.3feb14.csv',sep=''))
+
+# stop('cbw')
 
 # select observations for species of interest
 nass.spp.data <- list()
-landsat.spp.data <- list()
 all.rows <- list()
 nass.rows <- list()
-landsat.rows <- list()
+
 
 for (i in 1:length(spp.names))
 {
@@ -81,13 +92,20 @@ for (i in 1:length(spp.names))
 		position <- match(data.yr, data.yrs)
 		
 		# NASS
-		if (j==1) { nass.spp.data[[i]] <- merge(spp.obs.yr, nass.data[[position]], by=c('LATITUDE', 'LONGITUDE')) }
-		else { nass.spp.data[[i]] <- rbind(nass.spp.data[[i]], merge(spp.obs.yr, nass.data[[position]], by=c('LATITUDE', 'LONGITUDE'))) }
-		
-		# Landsat
-		if (j==1) { landsat.spp.data[[i]] <- merge(spp.obs.yr, landsat.data[[position]], by=c('LATITUDE', 'LONGITUDE')) }
-		else { landsat.spp.data[[i]] <- rbind(landsat.spp.data[[i]], merge(spp.obs.yr, landsat.data[[position]], by=c('LATITUDE', 'LONGITUDE'))) }
-		# print(colnames(landsat.spp.data[[i]])); stop('cbw')
+		# "Field1","SUB_ID","JHOUR","JDATE","YEAR","LATITUDE","LONGITUDE", "VALID","POINT_X","POINT_Y"
+		temp.data <- nass.data[[position]]
+		drop.indices <- match(c("Field1","SUB_ID","JHOUR","JDATE","YEAR","VALID"),colnames(temp.data))
+		temp.data <- temp.data[,-drop.indices]
+		values <- c(values,list(seq(1,300,1)[-unlist(values)]))
+		nass.var <- c(nass.var,'other')
+		temp.data$lulc <- sapply(temp.data$lulc,FUN=assign.class,USE.NAMES=FALSE,values=values,nass.var=nass.var)
+		temp.data$lulc <- factor(temp.data$lulc,levels=nass.var)
+		temp.data$hydro <- factor(temp.data$hydro,levels=seq(1,7,1))
+		temp.data$drain <- factor(temp.data$drain,levels=seq(1,7,1),ordered=TRUE)		
+		if (j==1) { nass.spp.data[[i]] <- merge(spp.obs.yr, temp.data, by=c('LATITUDE', 'LONGITUDE')) }
+		else { nass.spp.data[[i]] <- rbind(nass.spp.data[[i]], merge(spp.obs.yr, temp.data, by=c('LATITUDE', 'LONGITUDE'))) }
+		# if (j==1) { nass.spp.data[[i]] <- spp.obs.yr }
+		# else { nass.spp.data[[i]] <- rbind(nass.spp.data[[i]], spp.obs.yr) }
 	}
 	
 	all.rows[[i]] <- seq(1,dim(nass.spp.data[[i]])[1],1)
@@ -106,16 +124,10 @@ for (i in 1:length(spp.names))
 	nass.rows[[i]] <- all.rows[[i]][test==FALSE]
 	cat('nass data points...',length(nass.rows[[i]]),'\n')
 	
-	# Landsat
-	n.col <- dim(landsat.spp.data[[i]])[2]
-	test <- apply(X=landsat.spp.data[[i]],MAR=1,FUN=rm.na.pts)
-	# landsat.spp.data[[i]] <- landsat.spp.data[[i]][test==FALSE,]
-	# print(dim(landsat.spp.data[[i]])) # print(colnames(landsat.spp.data[[i]])); stop('cbw')
-	# stop('cbw')
+	# nass.spp.data <- gridSample.wrap(data,rows,FUN)
+	# temp <- nass.spp.data[[i]]
+	# temp <- temp[nass.rows[[i]],]
 	
-	landsat.rows[[i]] <- all.rows[[i]][test==FALSE]
-	cat('landsat data points...',length(landsat.rows[[i]]),'\n')
-	# stop('cbw')
 }
 
 # ========================================================

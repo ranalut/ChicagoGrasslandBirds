@@ -9,18 +9,22 @@ library(dismo)
 # source('2014.data.sample.r')
 
 # Observations
-obs.2014 <- read.csv('Z:/Chicago_Grasslands/BIRD_DATA/GrasslandBlitz2014Ebird/myebirddata13jan15.csv',stringsAsFactors=FALSE,header=TRUE)
+obs.2014 <- read.csv('D:/Chicago_Grasslands/BIRD_DATA/GrasslandBlitz2014Ebird/myebirddata13jan15b.csv',stringsAsFactors=FALSE,header=TRUE)
 
-# # target.columns <- c("SUB_ID","JHOUR","JDATE","YEAR","LATITUDE","LONGITUDE","SPECIES_CODE","HOW_MANY_ATLEAST","VALID")
-# obs.2014$VALID <- 1
-# obs.2014$JHOUR <- apply(obs.2014,1,julian.hour,col.name='Time')
-# obs.2014$JDATE <- apply(obs.2014,1,julian.table,col.name='Date',origin.yr=2014)
-# obs.2014$YEAR <- 2014
+# From the next step... c("JHOUR","JDATE","YEAR","LATITUDE","LONGITUDE","SPECIES_CODE","HOW_MANY_ATLEAST")
 
-# counts <- aggregate(VALID ~ Submission.ID + JHOUR + JDATE + YEAR + Latitude + Longitude, obs.2014, length)
-# # counts <- aggregate(VALID ~ SUB_ID + JHOUR + JDATE + YEAR + LATITUDE + LONGITUDE, obs.2014, length)
-# # counts <- aggregate(VALID ~ JHOUR + JDATE + YEAR + LATITUDE + LONGITUDE, obs, length)
-# print(dim(counts))
+# target.columns <- c("SUB_ID","JHOUR","JDATE","YEAR","LATITUDE","LONGITUDE","SPECIES_CODE","HOW_MANY_ATLEAST","VALID")
+obs.2014$JHOUR <- apply(obs.2014,1,julian.hour,col.name='TIME')
+obs.2014$JDATE <- apply(obs.2014,1,julian.table,col.name='DATE',origin.yr=2014)
+obs.2014$YEAR <- 2014
+
+write.csv(obs.2014,'D:/Chicago_Grasslands/BIRD_DATA/GrasslandBlitz2014Ebird/myebirddata13jan15c.csv')
+stop('cbw')
+
+counts <- aggregate(VALID ~ Submission.ID + JHOUR + JDATE + YEAR + LATITUDE + LONGITUDE, obs.2014, length)
+# counts <- aggregate(VALID ~ SUB_ID + JHOUR + JDATE + YEAR + LATITUDE + LONGITUDE, obs.2014, length)
+# counts <- aggregate(VALID ~ JHOUR + JDATE + YEAR + LATITUDE + LONGITUDE, obs, length)
+print(dim(counts))
 
 # colnames(counts) <- c('SUB_ID,JHOUR,JDATE,YEAR,LATITUDE,LONGITUDE,VALID')
 spp.common.names <- c("Bobolink","Sedge Wren","Henslow's Sparrow","Eastern Meadowlark","Grasshopper Sparrow")

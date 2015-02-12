@@ -4,6 +4,7 @@
 calc.focal.prop <- function(nass.map, class.vector, the.radius, workspace, the.year, the.nass.var)
 # calc.focal.prop <- function(nass.map=r.temp, class.vector=values[[j]], the.radius=radius[n], workspace=workspace, the.year=years[i], the.nass.var=nass.var[j])
 {
+	# Proportions
 	r.binary <- nass.map
 	the.test <- r.binary %in% class.vector # Or, consider layerize.
 	r.binary[the.test==FALSE] <- 0
@@ -13,6 +14,12 @@ calc.focal.prop <- function(nass.map, class.vector, the.radius, workspace, the.y
 	focal.prop <- focal(r.binary, w=w.matrix) # , pad=TRUE, padValue=0)
 	# plot(focal.prop, main=paste(the.year,the.nass.var))
 	writeRaster(focal.prop, paste(workspace,the.year,'_',the.nass.var,'_nass_30m_r',the.radius,'.tif',sep=''),overwrite=TRUE)
+	
+	# Patch Size
+	patch <- clump(r.binary, directions=8, gaps=FALSE)
+	freq.patch <- freq(patch, progress='text',useNA='no')
+	patch.size <- reclassify(patch, rcl=freq.patch)
+	writeRaster(patch.size, paste(workspace,the.year,'_',the.nass.var,'_nass_clump_30m.tif',sep=''),overwrite=TRUE)
 }
 
 # # Single run

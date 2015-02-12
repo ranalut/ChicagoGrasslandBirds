@@ -17,7 +17,7 @@ if (do.nass=='y')
 		the.data <- nass.spp.data[[i]][nass.rows[[i]],]
 		cat('\nnstart nass',spp.names[i],'\n')
 		cat('points considered...',dim(the.data)[1],'\n')
-		nass.models[[i]] <- gbm.step(data=the.data, gbm.x=c(4:5,9:36), gbm.y=6, family="poisson", tree.complexity=5, learning.rate=lr[i], bag.fraction=0.5)
+		nass.models[[i]] <- gbm.step(data=the.data, gbm.x=c(4:5,11:14,16:25), gbm.y=6, family="poisson", tree.complexity=5, learning.rate=lr[i], bag.fraction=0.5) # gbm.x=c(4:5,11:27) w/ drain & ndvi (2015) # gbm.x=c(4:5,9:36) original set (2014)
 		
 		cat('\nend nass',spp.names[i],'############################\n')
 	}
