@@ -23,15 +23,15 @@ for (i in 1:length(spp.names))
 		# stop('cbw')
 	}
 	
-	# Landsat
-	if (do.landsat=='y')
-	{
-		startTime <- Sys.time()
-		landsat.pred[[i]] <- predict(landsat.pred.data, landsat.models[[i]], n.trees=landsat.models[[i]]$n.trees, type='response', progress='window', na.rm=TRUE)
-		landsat.pred[[i]] <- round(landsat.pred[[i]],3)
-		writeRaster(landsat.pred[[i]],paste(output.path,spp.names[i],'.landsat.v',ver,'.tif',sep=''), overwrite=TRUE)
-		cat('end',spp.names[i],'time',Sys.time()-startTime,'\n')
-	}
+	# # Landsat
+	# if (do.landsat=='y')
+	# {
+		# startTime <- Sys.time()
+		# landsat.pred[[i]] <- predict(landsat.pred.data, landsat.models[[i]], n.trees=landsat.models[[i]]$n.trees, type='response', progress='window', na.rm=TRUE)
+		# landsat.pred[[i]] <- round(landsat.pred[[i]],3)
+		# writeRaster(landsat.pred[[i]],paste(output.path,spp.names[i],'.landsat.v',ver,'.tif',sep=''), overwrite=TRUE)
+		# cat('end',spp.names[i],'time',Sys.time()-startTime,'\n')
+	# }
 	# stop('cbw')
 }
 

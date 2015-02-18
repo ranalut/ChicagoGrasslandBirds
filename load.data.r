@@ -45,9 +45,6 @@ for (i in 1:length(data.yrs))
 	nass.data[[i]] <- extract(temp,unique.pts)
 	colnames(nass.data[[i]]) <- c('lulc',paste(nass.var,'.',rep(radius,each=length(nass.var)),sep=''),'patch.cells','hydro','drain','ndvi')
 	
-	# group levels
-	nass.data[[i]] <- factor(nass.data[[i]],levels=c())
-	
 	nass.data[[i]] <- data.frame(unique.pts@data,nass.data[[i]])
 	# write.csv(nass.data[[i]],paste(output.path,data.yrs[i],'.nass.extract.csv',sep=''))
 	# stop('cbw')

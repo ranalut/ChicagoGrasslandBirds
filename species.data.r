@@ -6,7 +6,6 @@ source('rm.na.pts.r') # Loads a function used below.
 source('closest.year.r')
 source('nass.lulc.classes.r')
 source('gridSample.max.r')
-source('grid.sample.r')
 
 # Load BCN data
 target.columns <- c("SUB_ID","JHOUR","JDATE","YEAR","LATITUDE","LONGITUDE","SPECIES_CODE","HOW_MANY_ATLEAST","VALID")
@@ -61,7 +60,7 @@ write.csv(obs,paste(drive,':/Chicago_Grasslands/BIRD_DATA/all.obs.3feb14.csv',se
 nass.spp.data <- list()
 all.rows <- list()
 nass.rows <- list()
-
+grid.56 <- raster('d:/chicago_grasslands/nass2/updated_cdl_2014/2007_nass_clump_30m.tif')
 
 for (i in 1:length(spp.names))
 {
@@ -97,8 +96,7 @@ for (i in 1:length(spp.names))
 		drop.indices <- match(c("Field1","SUB_ID","JHOUR","JDATE","YEAR","VALID"),colnames(temp.data))
 		temp.data <- temp.data[,-drop.indices]
 		values <- c(values,list(seq(1,300,1)[-unlist(values)]))
-		nass.var <- c(nass.var,'other')
-		temp.data$lulc <- sapply(temp.data$lulc,FUN=assign.class,USE.NAMES=FALSE,values=values,nass.var=nass.var)
+		temp.data$lulc <- sapply(temp.data$lulc,FUN=assign.class,USE.NAMES=FALSE,values=values,nass.var=c(nass.var,'other'))
 		temp.data$lulc <- factor(temp.data$lulc,levels=nass.var)
 		temp.data$hydro <- factor(temp.data$hydro,levels=seq(1,7,1))
 		temp.data$drain <- factor(temp.data$drain,levels=seq(1,7,1),ordered=TRUE)		
@@ -123,11 +121,18 @@ for (i in 1:length(spp.names))
 	
 	nass.rows[[i]] <- all.rows[[i]][test==FALSE]
 	cat('nass data points...',length(nass.rows[[i]]),'\n')
-	
-	# nass.spp.data <- gridSample.wrap(data,rows,FUN)
-	# temp <- nass.spp.data[[i]]
-	# temp <- temp[nass.rows[[i]],]
-	
+	# hist(nass.spp.data[[1]]$HOW_MANY_ATLEAST)
+	temp <- nass.spp.data[[i]]
+	temp <- temp[nass.rows[[i]],]
+	pts.1p56m <- gridSample.max(xy=temp[,c('POINT_X','POINT_Y')],r=grid.56,n=1,chess='',all.data=temp[,-match(c('POINT_X','POINT_Y'),colnames(temp))])
+	# stop('cbw')
+	cat('pts after gridSample\n')
+	nass.spp.data[[i]] <- pts.1p56m
+	print(dim(nass.spp.data[[1]]))
+	nass.rows[[i]] <- seq(1,dim(nass.spp.data[[1]])[1],1)
+	# print(colnames(nass.spp.data[[1]]))
+	# hist(nass.spp.data[[1]]$HOW_MANY_ATLEAST)
+	# stop('cbw')
 }
 
 # ========================================================

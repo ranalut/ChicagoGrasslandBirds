@@ -17,28 +17,34 @@ if (do.nass=='y')
 		the.data <- nass.spp.data[[i]][nass.rows[[i]],]
 		cat('\nnstart nass',spp.names[i],'\n')
 		cat('points considered...',dim(the.data)[1],'\n')
-		nass.models[[i]] <- gbm.step(data=the.data, gbm.x=c(4:5,11:14,16:25), gbm.y=6, family="poisson", tree.complexity=5, learning.rate=lr[i], bag.fraction=0.5) # gbm.x=c(4:5,11:27) w/ drain & ndvi (2015) # gbm.x=c(4:5,9:36) original set (2014)
-		
+		indices <- match(model.var,colnames(the.data))
+		nass.models[[i]] <- gbm.step(data=the.data, gbm.x=indices, gbm.y=9, family="poisson", tree.complexity=5, learning.rate=lr[i], bag.fraction=0.5) 
+		# See settings, run.brt, model.var for variables used.
+		# c(7,8,12:15,17:26,28) w/o drain but w/ ndvi
+		# c(4:5,11:14,16:25), gbm.y=6, w/o drain ndvi 
+		# gbm.x=c(4:5,11:27) w/ drain & ndvi (2015) 
+		# gbm.x=c(4:5,9:36) original set (2014)
+		# stop('cbw')
 		cat('\nend nass',spp.names[i],'############################\n')
 	}
 }
 
-# Landsat models
-if (do.landsat=='y')
-{
-	landsat.models <- list()
+# # Landsat models
+# if (do.landsat=='y')
+# {
+	# landsat.models <- list()
 	
-	for (i in 1:length(landsat.spp.data))
-	{
-		landsat.rows[[i]] <- drop.test.rows(landsat.rows[[i]], test.rows=test.rows)
-		the.data <- landsat.spp.data[[i]][landsat.rows[[i]],]
-		cat('\nstart landsat',spp.names[i],'\n')
-		cat('points considered...',dim(the.data)[1],'\n')
-		landsat.models[[i]] <- gbm.step(data=the.data, gbm.x=c(4:5,9:20), gbm.y=6, family="poisson", tree.complexity=5, learning.rate=lr[i], bag.fraction=0.5)
+	# for (i in 1:length(landsat.spp.data))
+	# {
+		# landsat.rows[[i]] <- drop.test.rows(landsat.rows[[i]], test.rows=test.rows)
+		# the.data <- landsat.spp.data[[i]][landsat.rows[[i]],]
+		# cat('\nstart landsat',spp.names[i],'\n')
+		# cat('points considered...',dim(the.data)[1],'\n')
+		# landsat.models[[i]] <- gbm.step(data=the.data, gbm.x=c(4:5,9:20), gbm.y=6, family="poisson", tree.complexity=5, learning.rate=lr[i], bag.fraction=0.5)
 		
-		cat('\nend landsat',spp.names[i],'############################\n')
-	}
-}
+		# cat('\nend landsat',spp.names[i],'############################\n')
+	# }
+# }
 
 # =========================================================================
 # Ideas
