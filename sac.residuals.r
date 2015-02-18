@@ -1,4 +1,6 @@
 
+library(geoR)
+library(foreign)
 
 # load the models, datasets, and train/test
 # load()
@@ -16,7 +18,7 @@ for (i in 1:5)
 	variable <- 'residuals'
 	v1 <- variog(coords = temp[,c('POINT_X','POINT_Y')], data = temp[,variable], breaks = breaks)
 
-	v1.summary <- cbind(breaks, v1$v, v1$n)
+	v1.summary <- cbind(breaks[-1], v1$v, v1$n)
 	colnames(v1.summary) <- c("lag", "semi-variance", "# of pairs")
 	print(v1.summary)
 	plot(v1, type = "b", main = paste("Variogram: ",variable,' Species:',spp.names[i],sep=''))

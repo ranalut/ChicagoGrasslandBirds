@@ -1,5 +1,5 @@
 
-ver <- '20b'
+ver <- '21c'
 load(paste('d:/chicago_grasslands/models/nass.species.models.v',ver,'.rdata',sep=''))
 # load('z:/chicago_grasslands/models/landsat.species.models.v10.rdata')
 spp.names <- c('boboli','sedwre','henspa','easmea','graspa')
