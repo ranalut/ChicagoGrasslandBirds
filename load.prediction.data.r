@@ -30,18 +30,20 @@ if (do.nass=='y')
 	
 	# Load and rename layers
 	nass.file.names <- paste(nass.path,pred.year,'_',nass.var,'_nass_30m_r',rep(radius,each=length(nass.var)),'.tif',sep='')
+	nass.file.names2 <- paste(nass.path,data.yrs[i],'_',nass.var,'_nass_dist.tif',sep='')
 	nass.file.names <- c(
 		paste(nass.path,pred.year,'_nass_reclass.tif',sep=''),
 		nass.file.names,
 		paste(nass.path,pred.year,'_nass_clump_30m.tif',sep=''),
 		paste(soil.path,'hydro_class.tif',sep=''),
 		paste(soil.path,'drain_class.tif',sep=''),
-		paste(ndvi.path,pred.year,'_ndvi_30m.tif',sep='')
+		paste(ndvi.path,pred.year,'_ndvi_30m.tif',sep=''),
+		nass.file.names2
 		)
 
 	print(nass.file.names)
 	nass.pred.data <- stack(nass.file.names)
-	names(nass.pred.data) <- c('lulc',paste(nass.var,'.',rep(radius,each=length(nass.var)),sep=''),'patch.cells','hydro','drain','ndvi')
+	names(nass.pred.data) <- c('lulc',paste(nass.var,'.',rep(radius,each=length(nass.var)),sep=''),'patch.cells','hydro','drain','ndvi',paste(nass.var,'.dist',sep=''))
 	nass.pred.data <- addLayer(nass.pred.data, JDATE, JHOUR)
 	
 	# nass.pred.data <- sapply(temp.data$lulc,FUN=assign.class,USE.NAMES=FALSE,values=values,nass.var=c(nass.var,'other'))

@@ -11,12 +11,12 @@ soil.path <- paste(drive,':/chicago_grasslands/soil/',sep='')
 # landsat.path <- paste(drive,':/chicago_grasslands/landsat2/',sep='')
 output.path <- paste(drive,':/chicago_grasslands/models/',sep='')
 
-do.data.proc <- 'y' # See processing settings below.  Remove clouds (landsat.processing.r) before running.
+do.data.proc <- 'n' # See processing settings below.  Remove clouds (landsat.processing.r) before running.
 do.load.data <- 'n'
 do.spp.data <- 	'n'
 do.test.data <- 'n' # DO NOT OVERWRITE. Change output name below if turned on.
-do.models <- 	'n'
-do.eval <- 		'n'
+do.models <- 	'y'
+do.eval <- 		'y'
 do.prediction <-'n'
 do.nass <-		'y'
 do.landsat <-	'n'
@@ -98,17 +98,19 @@ if (do.load.data=='y')
 	# Version 10: 2007:2011, 100, 1000 radius, cloudless, non-BCN data added
 	# Version 11: 2011, 1000, LULC only
 	# Version 20: 2007:2014, LULC, Soils, Patch, NDVI
+	# Version 30: 2007:2014, LULC, Soils, Patch, NDVI, distance
+	# Version 31: 2007:2014, LULC, Soils, Patch, NDVI, distance <1000m
 	# save(nass.data,landsat.data,file=paste(output.path,'unique.point.data.v10.rdata',sep=''))
-	save(nass.data,file=paste(output.path,'unique.point.data.v20.rdata',sep=''))
+	save(nass.data,file=paste(output.path,'unique.point.data.v31.rdata',sep=''))
 }
 # ===============================================================
 # Extract Species Data 
 # Generate datasets for each individual species pulling data for each survey year.
 if (do.spp.data=='y')
 {
-	load(file=paste(output.path,'unique.point.data.v20.rdata',sep='')) # Check above for versions.
+	load(file=paste(output.path,'unique.point.data.v31.rdata',sep='')) # Check above for versions.
 	
-	count.file <- 'spp.pres.abs.v21.txt'
+	count.file <- 'spp.pres.abs.v31.txt'
 	source('species.data.r') 
 	
 	# Version 1: 2007, 2009
@@ -120,39 +122,51 @@ if (do.spp.data=='y')
 	# Version 10: 2007:2011, 100, 1000 radius, cloudless, non-BCN data added
 	# Version 20: 2007:2014, LULC, Soils, Patch, NDVI
 	# Version 21: 2007:2014, LULC, Soils, Patch, NDVI, max obs per 56m cell
+	# Version 30: 2007:2014, LULC, Soils, Patch, NDVI, distance, max obs per 56m cell
+	# Version 31: 2007:2014, LULC, Soils, Patch, NDVI, distance <1000m, max obs per 56m cell (31b) add uninformative variable (e) matches with model letter below.
 	# save(nass.spp.data,landsat.spp.data,nass.rows,landsat.rows,file=paste(output.path, 'species.data.v10.rdata',sep='')) 
-	save(nass.spp.data,nass.rows,file=paste(output.path,'species.data.v21.rdata',sep=''))
+	save(nass.spp.data,nass.rows,file=paste(output.path,'species.data.v31e.rdata',sep=''))
 }
 # ===============================================================
 # Test Data
 if (do.test.data=='y')
 {
 	source('train.test.data.r')
-	# load(file=paste(output.path,'species.data.v21.rdata',sep='')) # Could be any data
-	create.test.data(row.numbers=nass.rows[[1]], proportion=0.2, file.name=paste(output.path,'test.rows.v21.txt',sep=''))
+	source('gridSample.max.r')
+	load(file=paste(output.path,'species.data.v31e.rdata',sep='')) # Could be any data
+	# create.test.data(row.numbers=nass.rows[[1]], proportion=0.2, file.name=paste(output.path,'test.rows.v21.txt',sep=''))
 		
 	# source('train.test.data.r')
 	# load(file=paste(output.path,'species.data.v21.rdata',sep='')) # Could be any data
-	# grid.5010 <- raster('d:/chicago_grasslands/nass2/updated_cdl_2014/grid.5010m.tif')
+	grid.5010 <- raster('d:/chicago_grasslands/nass2/updated_cdl_2014/grid.5010m.tif')
 	# stop('cbw')
-	# temp <- SpatialPointsDataFrame(nass.spp.data[[1]],coords=
-	# train <- gridSample(r=grid.5010,xy=nass.spp.data[[1]][,c('POINT_X','POINT_Y')],n=8000,chess='black')
-	# plot(spcoords=train)
-	# test <- gridSample(r=grid.5010,xy=nass.spp.data[[1]][,c('POINT_X','POINT_Y')],n=8000,chess='black')
-	# spplot(coords=test)
-	# stop('cbw')
-	# create.test.data(row.numbers=nass.rows[[1]], proportion=0.2, file.name=paste(output.path,'test.rows.v20.txt',sep=''))
+	temp <- nass.spp.data[[1]][,-match('cell',colnames(nass.spp.data[[1]]))]
+	gridded.pts <- gridSample.max(xy=temp[,c('POINT_X','POINT_Y')],r=grid.5010,n=5000,chess='',all.data=temp[,-match(c('POINT_X','POINT_Y'),colnames(temp))])
+	test.set <- grid.train.test(rows=nass.rows[[1]], cells=gridded.pts$cell, k=5)
+	# temp <- SpatialPoints(gridded.pts[,1:2])
+	# for (i in 1:5) { plot(temp[test.set[[i]],]) 
+	save(test.set,file=paste(output.path,'test.set.v31e.rdata',sep=''))
 }
 # ===============================================================
 # Build Models 
 if (do.models=='y')
 {
 	# See above for versions.
-	load(file=paste(output.path,'species.data.v21.rdata',sep=''))
+	load(file=paste(output.path,'species.data.v31e.rdata',sep=''))
 	test.rows <- scan(file=paste(output.path,'test.rows.v21.txt',sep=''),what=numeric())
 	# v21b model.var <- c("JHOUR","JDATE","lulc","corn.1000","soy.1000","water.1000","herb.wetland.1000","grass.hay.1000","dev.low.1000", "dev.high.1000","patch.cells","hydro")
-	model.var <- c("JHOUR","JDATE","lulc","patch.cells","hydro") # v21c
-		
+	# model.var <- c("JHOUR","JDATE","lulc","patch.cells","hydro") # v21c
+	# model.var <- c("JHOUR","JDATE","lulc","ndvi","corn.dist","soy.dist","water.dist","herb.wetland.dist","grass.hay.dist", "dev.low.dist", "dev.high.dist","patch.cells","hydro") # v30/31 
+	model.var <- c("JHOUR","JDATE","lulc","ndvi","corn.dist","soy.dist","water.dist","herb.wetland.dist", "grass.hay.dist","dev.low.dist", "dev.high.dist","corn.1000","soy.1000","water.1000","herb.wetland.1000", "grass.hay.1000","dev.low.1000", "dev.high.1000","patch.cells","hydro") # v31b
+	# model.var <- list(
+		# c("JHOUR","grass.hay.1000","patch.cells","dev.high.1000","soy.1000","hydro"),
+		# c("JHOUR","grass.hay.1000","water.1000","herb.wetland.1000","dev.low.dist","corn.1000"),
+		# c("JHOUR","grass.hay.1000","patch.cells","lulc","soy.1000","grass.hay.dist"),
+		# c("JHOUR","grass.hay.1000","lulc","patch.cells","corn.1000","dev.high.1000"),
+		# c("JHOUR","grass.hay.1000","lulc","soy.1000","patch.cells","hydro")
+		# ) # v31c & d
+	model.var <- c("JHOUR","JDATE","lulc","ndvi","corn.dist","soy.dist","water.dist","herb.wetland.dist", "grass.hay.dist","dev.low.dist", "dev.high.dist","corn.1000","soy.1000","water.1000","herb.wetland.1000", "grass.hay.1000","dev.low.1000", "dev.high.1000","patch.cells","hydro","unif"); model.var <- list(model.var, model.var, model.var, model.var, model.var) # v31e add uninformative variable for model selection.
+	
 	source('train.test.data.r')
 	source('deviance.explained.r')
 	source('brt.models.r')
@@ -165,18 +179,21 @@ if (do.models=='y')
 	# Version 10: 2007:2011, 100, 1000 radius, cloudless, non-BCN data added
 	# Version 20: 2007:2014, LULC, Soils, Patch, NDVI
 	# Version 20b: 2007:2014, LULC, Soils, Patch
-	# Version 21: 2007:2014, LULC, Soils, Patch, NDVI, max obs per 56m cell, random selection of cells for model train/test.
+	# Version 21: 2007:2014, LULC, proportions, Soils, Patch, NDVI, max obs per 56m cell, random cells train/test.
 	# Version 21b: 2007:2014, LULC, Soils, Patch, max obs per 56m cell, random cells train/test 
-	# Version 21c: 2007:2014, LULC, Soils, Patch, max obs per 56m cell, random cells train/test
-	
-	save(nass.models, file=paste(output.path,'nass.species.models.v21c.rdata',sep=''))
+	# Version 21c: 2007:2014, proportion 1000 radius, LULC, Soils, Patch, max obs per 56m cell, random cells train/test
+	# Version 30: 2007:2014, LULC, Soils, Patch, NDVI, distance, max obs per 56m cell, random cells train/test
+	# Version 31: 2007:2014, LULC, Soils, Patch, NDVI, distance <1000m, max obs per 56m cell, random cells train/test, weights
+	# Version 31b: 2007:2014, LULC, Soils, Patch, NDVI, prop & distance <1000m, max obs per 56m cell, random cells train/test, weights
+	# Version 31c: 2007:2014, top 5 variables by importance for ea spp., no weights. (d) with weights.
+	save(nass.models, file=paste(output.path,'nass.species.models.v31e.rdata',sep=''))
 }
 # ================================================================
 if (do.eval=='y')
 {
-	load(file=paste(output.path,'species.data.v21.rdata',sep=''))
+	load(file=paste(output.path,'species.data.v31e.rdata',sep=''))
 	test.rows <- scan(file=paste(output.path,'test.rows.v21.txt',sep=''),what=numeric())
-	ver <- '21c' # Version
+	ver <- '31e' # Version
 	load(file=paste(output.path,'nass.species.models.v',ver,'.rdata',sep=''))
 	# load(file=paste(output.path,'landsat.species.models.v',ver,'.rdata',sep=''))
 	
@@ -193,7 +210,7 @@ if (do.eval=='y')
 if (do.prediction=='y')
 {
 	radii <- list(1000) # list(c(100,1000)) # list(c(100,500),c(100,1000),c(500,1000))
-	versions <- '21c' # c(5,6,7) # If working with a version #b, need to copy and rename models rdata file.
+	versions <- '31e' # c(5,6,7) # If working with a version #b, need to copy and rename models rdata file.
 	study.area.1 <- extent(matrix(c(582000,666000,2100000,2150000),ncol=2,byrow=TRUE))
 	
 	for (tt in 1:length(versions))

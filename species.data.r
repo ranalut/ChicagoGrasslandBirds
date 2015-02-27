@@ -51,8 +51,9 @@ obs <- rbind(obs, non.bcn.data) # 52534 # 43448 species records (includes other 
 print(dim(counts))
 print(dim(obs))
 
-write.csv(counts,paste(drive,':/Chicago_Grasslands/BIRD_DATA/all.counts.3feb14.csv',sep=''))
-write.csv(obs,paste(drive,':/Chicago_Grasslands/BIRD_DATA/all.obs.3feb14.csv',sep=''))
+write.csv(counts,paste(drive,':/Chicago_Grasslands/BIRD_DATA/all.counts.3feb15.csv',sep=''))
+write.csv(obs,paste(drive,':/Chicago_Grasslands/BIRD_DATA/all.obs.3feb15.csv',sep=''))
+uninformative <- runif(10000,1,100)
 
 # stop('cbw')
 
@@ -99,7 +100,10 @@ for (i in 1:length(spp.names))
 		temp.data$lulc <- sapply(temp.data$lulc,FUN=assign.class,USE.NAMES=FALSE,values=values,nass.var=c(nass.var,'other'))
 		temp.data$lulc <- factor(temp.data$lulc,levels=nass.var)
 		temp.data$hydro <- factor(temp.data$hydro,levels=seq(1,7,1))
-		temp.data$drain <- factor(temp.data$drain,levels=seq(1,7,1),ordered=TRUE)		
+		temp.data$drain <- factor(temp.data$drain,levels=seq(1,7,1),ordered=TRUE)
+		indices <- match(paste(nass.var,'.dist',sep=''),colnames(temp.data))
+		temp.data[,indices][temp.data[,indices] > 1000] <- 1000
+		temp.data$unif <- uninformative[1:dim(temp.data)[1]]
 		if (j==1) { nass.spp.data[[i]] <- merge(spp.obs.yr, temp.data, by=c('LATITUDE', 'LONGITUDE')) }
 		else { nass.spp.data[[i]] <- rbind(nass.spp.data[[i]], merge(spp.obs.yr, temp.data, by=c('LATITUDE', 'LONGITUDE'))) }
 		# if (j==1) { nass.spp.data[[i]] <- spp.obs.yr }

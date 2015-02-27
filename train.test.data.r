@@ -17,3 +17,30 @@ drop.test.rows <- function(row.numbers, test.rows)
 	return(output)
 }
 
+grid.train.test <- function(rows, cells, k)
+{
+	# print(class(rows)); print(class(cells))
+	prop <- 1/k
+	output <- list()
+	all.cells <- unique(cells)
+	# print(all.cells)
+	target <- floor(prop * length(rows))
+	
+	for (i in 1:k)
+	{
+		set <- NA
+		while (length(set)<target & length(all.cells)>1)
+		{
+			pick <- sample(all.cells,1)
+			set <- c(set,rows[cells==pick])
+			all.cells <- all.cells[-match(pick,all.cells)]
+			# cat(length(all.cells),'\n')
+		}
+		output[[i]] <- set[-1]
+		# return(output)
+		# print(output[[i]])
+	}
+	return(output)
+}
+
+

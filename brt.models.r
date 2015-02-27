@@ -5,6 +5,7 @@ library(gbm)
 library(tcltk2)
 
 # source('settings.r')
+# stop('cbw')
 
 # NASS models
 if (do.nass=='y')
@@ -17,8 +18,8 @@ if (do.nass=='y')
 		the.data <- nass.spp.data[[i]][nass.rows[[i]],]
 		cat('\nnstart nass',spp.names[i],'\n')
 		cat('points considered...',dim(the.data)[1],'\n')
-		indices <- match(model.var,colnames(the.data))
-		nass.models[[i]] <- gbm.step(data=the.data, gbm.x=indices, gbm.y=9, family="poisson", tree.complexity=5, learning.rate=lr[i], bag.fraction=0.5) 
+		indices <- match(model.var[[i]],colnames(the.data))
+		nass.models[[i]] <- gbm.step(data=the.data, gbm.x=indices, gbm.y=9, family="poisson", tree.complexity=5, learning.rate=lr[i], bag.fraction=0.5) # ,site.weights=the.data$weight) 
 		# See settings, run.brt, model.var for variables used.
 		# c(7,8,12:15,17:26,28) w/o drain but w/ ndvi
 		# c(4:5,11:14,16:25), gbm.y=6, w/o drain ndvi 

@@ -32,5 +32,20 @@ for (i in 1)
 	write.csv(temp,'d:/chicago_grasslands/models/correlations.unique.point.data.v11.csv')
 }
 
+# 2014
+load(file='d:/chicago_grasslands/models/unique.point.data.v31.rdata')
+model.var <- c("JHOUR","JDATE","lulc","ndvi","corn.dist","soy.dist","water.dist","herb.wetland.dist","grass.hay.dist","dev.low.dist", "dev.high.dist","corn.1000","soy.1000","water.1000","herb.wetland.1000","grass.hay.1000","dev.low.1000", "dev.high.1000","patch.cells","hydro") # v31b
+
+for (i in 8)
+{
+	the.data <- nass.data[[i]]
+	indices <- match(model.var,colnames(the.data))
+	temp <- cor(the.data[,indices],use='pair')
+	temp <- round(temp,3)
+	# temp[abs(temp)<0.5] <- NA
+	# colnames(temp) <- model.var # c(paste(letters[1:length(indices)],1000,sep=''),'patch.cells')
+	print(temp)
+	write.csv(temp,'d:/chicago_grasslands/models/correlations.unique.point.data.v31.csv')
+}
 
 

@@ -15,7 +15,7 @@ nass.cor.test <- NA
 
 for (i in 1:length(nass.spp.data))
 {
-	indices <- match(model.var,colnames(nass.spp.data[[i]]))
+	indices <- match(model.var[[i]],colnames(nass.spp.data[[i]]))
 	evaluation <- model.eval(the.model=nass.models[[i]], covariates=nass.spp.data[[i]][,indices], test.rows=test.rows, obs=nass.spp.data[[i]][,9], spp=spp.names[i]) # c(7,8,12:15,17:26,28) # c(4:5,11:27)# c(4:5,9:36)
 	
 	nass.dev.exp.cv[i] <- evaluation[[1]]; nass.dev.exp.test[i] <- evaluation[[2]]
