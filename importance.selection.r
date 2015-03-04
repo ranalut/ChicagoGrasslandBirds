@@ -26,4 +26,4 @@ for (i in 1:5)
 }
 
 print(var.in)
-save(var.in,file='d:/chicago_grasslands/models/nass.models.var.v32.rdata')
+# save(var.in,file='d:/chicago_grasslands/models/nass.models.var.v32.rdata')

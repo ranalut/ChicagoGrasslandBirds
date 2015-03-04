@@ -14,10 +14,10 @@ output.path <- paste(drive,':/chicago_grasslands/models/',sep='')
 do.data.proc <- 'n' # See processing settings below.  Remove clouds (landsat.processing.r) before running.
 do.load.data <- 'n'
 do.spp.data <- 	'n'
-do.test.data <- 'y' # DO NOT OVERWRITE. Change output name below if turned on.
-do.models <- 	'y'
-do.eval <- 		'y'
-do.prediction <-'n'
+do.test.data <- 'n' # DO NOT OVERWRITE. Change output name below if turned on.
+do.models <- 	'n'
+do.eval <- 		'n'
+do.prediction <-'y'
 do.nass <-		'y'
 do.landsat <-	'n'
 do.kd <- 		'n'
@@ -227,26 +227,28 @@ if (do.eval=='y')
 # Prediction 
 if (do.prediction=='y')
 {
-	radii <- list(1000) # list(c(100,1000)) # list(c(100,500),c(100,1000),c(500,1000))
-	versions <- '31e' # c(5,6,7) # If working with a version #b, need to copy and rename models rdata file.
-	study.area.1 <- extent(matrix(c(582000,666000,2100000,2150000),ncol=2,byrow=TRUE))
+	ver <- '33a'
+	# load(file=paste(output.path,'species.data.v31e.rdata',sep='')) # see above label description
+	# test.rows <- list(NA,NA,NA,NA,NA) 
+	# load(file=paste(output.path,'nass.models.var.v32.rdata',sep='')) # identifies the model variables based on previous set
+	# model.var <- var.in
 	
-	for (tt in 1:length(versions))
-	{
-		radius <- radii[[tt]]
-		ver <- versions[tt]
-		reclass.lulc <- FALSE
-		source('load.prediction.data.r')
-		
-		# ver <- 6
-		if (do.nass=='y') { load(file=paste(output.path,'nass.species.models.v',ver,'.rdata',sep='')) } 
-		# if (do.landsat=='y') { load(file=paste(output.path,'landsat.species.models.v',ver,'.rdata',sep='')) }
-		
-		source('model.prediction.r') # Be sure to change the file output names
-		
-		if (do.nass=='y') { save(nass.pred, file=paste(output.path,'nass.pred.v',ver,'.rdata',sep='')) }
-		# if (do.landsat=='y') { save(landsat.pred, file=paste(output.path,'landsat.pred.v',ver,'.rdata',sep='')) }
-	}
+	# lr <- c(0.01,0.005,0.01,0.01,0.01)
+	# source('brt.models.r')
+	# save(nass.models, file=paste(output.path,'nass.species.models.v',ver,'.rdata',sep=''))
+	
+	# study.area.1 <- extent(matrix(c(582000,666000,2100000,2150000),ncol=2,byrow=TRUE))
+	study.area.1 <- NA
+	
+	radius <- 1000
+	reclass.lulc <- FALSE
+	source('load.prediction.data.r')
+	
+	if (do.nass=='y') { load(file=paste(output.path,'nass.species.models.v',ver,'.rdata',sep='')) } 
+	source('model.prediction.r') # Be sure to change the file output names
+	if (do.nass=='y') { save(nass.pred, file=paste(output.path,'nass.pred.v',ver,'.rdata',sep='')) }
+
+	# Zero cutoff on maps should be based on the minimum modeled abundance from a presence point.
 }
 # ====================================================================
 # Kernel Density

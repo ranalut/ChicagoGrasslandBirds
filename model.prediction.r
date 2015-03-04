@@ -10,7 +10,7 @@ library(gbm)
 nass.pred <- list()
 landsat.pred <- list()
 
-for (i in 1:length(spp.names))
+for (i in 5) # length(spp.names))
 {
 	# NASS
 	if (do.nass=='y')

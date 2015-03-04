@@ -30,7 +30,7 @@ if (do.nass=='y')
 	
 	# Load and rename layers
 	nass.file.names <- paste(nass.path,pred.year,'_',nass.var,'_nass_30m_r',rep(radius,each=length(nass.var)),'.tif',sep='')
-	nass.file.names2 <- paste(nass.path,data.yrs[i],'_',nass.var,'_nass_dist.tif',sep='')
+	nass.file.names2 <- paste(nass.path,pred.year,'_',nass.var,'_nass_dist.tif',sep='')
 	nass.file.names <- c(
 		paste(nass.path,pred.year,'_nass_reclass.tif',sep=''),
 		nass.file.names,
@@ -50,7 +50,7 @@ if (do.nass=='y')
 	# nass.pred.data[['hydro']] <- factor(nass.pred.data[['hydro']],levels=seq(1,7,1))
 	# nass.pred.data[['drain']] <- factor(nass.pred.data[['drain']],levels=seq(1,7,1),ordered=TRUE)
 	
-	nass.pred.data <- crop(nass.pred.data, study.area.1)
+	if (is.na(study.area.1)==FALSE) { nass.pred.data <- crop(nass.pred.data, study.area.1) }
 	print(nass.pred.data)
 	# stop('cbw')
 }
