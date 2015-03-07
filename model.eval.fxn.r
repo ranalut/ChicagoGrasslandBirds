@@ -6,6 +6,12 @@ model.eval <- function(the.model, covariates, test.rows, obs, spp)
 {
 	test <- predict.gbm(newdata=covariates[test.rows,], the.model, n.trees=the.model$n.trees, type='response', progress='window', na.rm=TRUE)
 	plot(test ~ obs[test.rows], main=paste(spp,', fitted ~ obs',sep=''), xlab='counts', ylab='predicted')
+	
+	obs.pred <- as.data.frame(cbind(obs[test.rows],test))
+	colnames(obs.pred) <- c('obs','pred')
+	temp <- obs.pred[obs.pred$obs>0,]
+	threshold <- min(temp$pred)
+		
 	dev.exp.cv <- dsq(
 		mean.null=the.model$self.statistics$mean.null, 
 		validation=the.model$cv.statistics$deviance.mean
@@ -21,7 +27,7 @@ model.eval <- function(the.model, covariates, test.rows, obs, spp)
 	cor.test <- cor(test,obs[test.rows])
 	
 	# stop('cbw')
-	return(list(dev.exp.cv, dev.exp.test, cor.cv, cor.test))
+	return(list(dev.exp.cv, dev.exp.test, cor.cv, cor.test, threshold))
 }
 
 # i <- 1

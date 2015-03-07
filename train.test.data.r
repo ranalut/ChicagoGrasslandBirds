@@ -43,4 +43,49 @@ grid.train.test <- function(rows, cells, k)
 	return(output)
 }
 
+psuedo.prev <- function(x)
+{
+	x[x>0] <- 1
+	return(mean(x))
+}
+
+grid.train.test.prev <- function(rows, cells, prop, counts)
+{
+	# print(class(rows)); print(class(cells))
+	all.prev <- psuedo.prev(counts)
+	cat('prevalence =',all.prev,'\n')
+	test <- 1
+	
+	while (test > all.prev | test < (all.prev-0.05))
+	{
+		all.cells <- unique(cells)
+		cell.prev <- NA
+		for (i in 1:length(all.cells))
+		{
+			cell.prev[i] <- psuedo.prev(counts[all.cells==all.cells[i]])
+		}
+		# print(cell.prev)
+		# weights <- 1 - (abs(cell.prev-all.prev)) # weighting cells by how closely their prevalence is to the dataset's prevalence. Would pull cells with a mix if habitat.
+		# # weights <- weights/max(weights)
+		# print(all.cells); print(weights)
+		target <- floor(prop * length(rows))
+		
+		set <- NA
+		while (length(set)<target & length(all.cells)>1)
+		{
+			pick <- sample(all.cells,1) # ,prob=weights)
+			set <- c(set,rows[cells==pick])
+			# weights <- weights[-match(pick,all.cells)]
+			all.cells <- all.cells[-match(pick,all.cells)]
+			# cat(length(all.cells),length(weights),'\n')
+		}
+		output <- set[-1]
+		test <- psuedo.prev(counts[output])	
+		# cat('test prevalence =',test,'\n')
+	}
+	cat('test prevalence =',test,'\n')
+	# print(output[[i]])
+	return(output)
+}
+
 
