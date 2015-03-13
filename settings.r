@@ -14,12 +14,12 @@ output.path <- paste(drive,':/chicago_grasslands/models/',sep='')
 do.data.proc <- 'n' # See processing settings below.  Remove clouds (landsat.processing.r) before running.
 do.load.data <- 'n'
 do.spp.data <- 	'n'
-do.test.data <- 'y' # DO NOT OVERWRITE. Change output name below if turned on.
+do.test.data <- 'n' # DO NOT OVERWRITE. Change output name below if turned on.
 do.models <- 	'n'
 do.final <- 	'n'
 do.eval <- 		'n'
-do.prediction <-'n'
-do.nass <-		'n'
+do.prediction <-'y'
+do.nass <-		'y'
 do.landsat <-	'n'
 do.kd <- 		'n'
 
@@ -51,7 +51,7 @@ lr <- c(0.01,0.005,0.01,0.01,0.01)
 pred.year <- 2014 # '20XX' # 2010 # data.yrs[length(data.yrs)] '20XX' is based on mean for all years.  '20YY' is based on mean for last 3 years (2009-11). 5-yr average makes the most sense (notes 2/19/14).
 # pred.day <- 194 # 'XXX' # 'YYY' # '175' # days[length(days)]
 
-study.area.1 <- extent(matrix(c(593000,707000,2043000,2199000),ncol=2,byrow=TRUE))
+# study.area.1 <- extent(matrix(c(593000,707000,2043000,2199000),ncol=2,byrow=TRUE))
 # study.area.2 <- extent(matrix(c(345000,470000,4540000,4720000),ncol=2,byrow=TRUE))
 
 # ===============================================================
@@ -134,28 +134,35 @@ if (do.test.data=='y')
 {
 	source('train.test.data.r')
 	source('gridSample.max.r')
-	ver <- '35c'
-	test.set <- list()
-	load(file=paste(output.path,'species.data.v31e.rdata',sep='')) # Could be any data
-	# create.test.data(row.numbers=nass.rows[[1]], proportion=0.2, file.name=paste(output.path,'test.rows.v21.txt',sep=''))
-		
-	# source('train.test.data.r')
-	# load(file=paste(output.path,'species.data.v21.rdata',sep='')) # Could be any data
-	grid.5010 <- raster('d:/chicago_grasslands/nass2/updated_cdl_2014/grid.5010m.tif')
-	# stop('cbw')
-	sink(paste(output.path,'test.set.v',ver,'.txt',sep=''))
-	for (i in 1:5)
+	for (n in 1:20)
 	{
-		temp <- nass.spp.data[[i]][,-match('cell',colnames(nass.spp.data[[i]]))]
-		gridded.pts <- gridSample.max(xy=temp[,c('POINT_X','POINT_Y')],r=grid.5010,n=5000,chess='',all.data=temp[,-match(c('POINT_X','POINT_Y'),colnames(temp))])
-		test.set[[i]] <- grid.train.test.prev(rows=nass.rows[[i]], cells=gridded.pts$cell, prop=0.2, counts=gridded.pts$HOW_MANY_ATLEAST)
+		# v36 rule: prevalence in test is < train, but no more less than 0.025.
+		# v37 rule: test prev < train prev + 0.025 & > train prev - 0.025
+		ver <- paste(37,letters[n],sep='')
+		# ver <- '35c'
+		test.set <- list()
+		load(file=paste(output.path,'species.data.v31e.rdata',sep='')) # Could be any data
+		# create.test.data(row.numbers=nass.rows[[1]], proportion=0.2, file.name=paste(output.path,'test.rows.v21.txt',sep=''))
+			
+		# source('train.test.data.r')
+		# load(file=paste(output.path,'species.data.v21.rdata',sep='')) # Could be any data
+		grid.5010 <- raster('d:/chicago_grasslands/nass2/updated_cdl_2014/grid.5010m.tif')
+		# stop('cbw')
+		sink(paste(output.path,'test.set.v',ver,'.txt',sep=''))
+		for (i in 1:5)
+		{
+			temp <- nass.spp.data[[i]][,-match('cell',colnames(nass.spp.data[[i]]))]
+			gridded.pts <- gridSample.max(xy=temp[,c('POINT_X','POINT_Y')],r=grid.5010,n=5000,chess='',all.data=temp[,-match(c('POINT_X','POINT_Y'),colnames(temp))])
+			test.set[[i]] <- grid.train.test.prev(rows=nass.rows[[i]], cells=gridded.pts$cell, prop=0.2, counts=gridded.pts$HOW_MANY_ATLEAST)
+		}
+		sink()
+		temp <- SpatialPoints(gridded.pts[,1:2])
+		for (i in 1:5) { plot(temp[test.set[[i]],],main=spp.names[i]) }
+		plot(temp, main='all')
+		save(test.set,file=paste(output.path,'test.set.v',ver,'.rdata',sep=''))
+		# In the end I used output from 34 and 34b to create 34bb, which has prev(train) >= prev(test) for all spp. This avoided negative deviance explained values. This may inflate performance consequently, but data is still spatially stratified and random.
 	}
-	sink()
-	temp <- SpatialPoints(gridded.pts[,1:2])
-	for (i in 1:5) { plot(temp[test.set[[i]],],main=spp.names[i]) }
-	plot(temp, main='all')
-	save(test.set,file=paste(output.path,'test.set.v',ver,'.rdata',sep=''))
-	# In the end I used output from 34 and 34b to create 34bb, which has prev(train) >= prev(test) for all spp. This avoided negative deviance explained values. This may inflate performance consequently, but data is still spatially stratified and random.
+	stop('cbw')
 }
 # ===============================================================
 # Build Models 
@@ -200,8 +207,8 @@ if (do.final=='y')
 {
 	load(file=paste(output.path,'species.data.v31e.rdata',sep='')) # see above label description
 	load(paste(output.path,'nass.species.models.v34.rdata',sep=''))
-	load(paste(output.path,'test.set.v34bb.rdata',sep=''))
-	ver <- '34bb'
+	ver <- '36b'
+	load(paste(output.path,'test.set.v',ver,'.rdata',sep=''))
 	drops <- NA
 	for (i in 1:5)
 	{
@@ -237,7 +244,7 @@ if (do.final=='y')
 	do.stepwise <- 'n'
 	test.rows <- test.set
 	source('brt.models.r')
-	ver <- paste(ver,'f',sep='')
+	# ver <- paste(ver,'f',sep='')
 	save(nass.models, file=paste(output.path,'nass.species.models.v',ver,'.rdata',sep=''))
 	# source('variable.importance.r')
 }
@@ -246,10 +253,9 @@ if (do.final=='y')
 if (do.eval=='y')
 {
 	load(file=paste(output.path,'species.data.v31e.rdata',sep='')) # see above label description
-	load(paste(output.path,'test.set.v34bb.rdata',sep=''))
-	ver <- '34bbf'
+	ver <- '36b'
+	load(paste(output.path,'test.set.v',ver,'.rdata',sep=''))
 	load(paste(output.path,'nass.species.models.v',ver,'.rdata',sep=''))
-	# test.rows <- scan(file=paste(output.path,'test.rows.v21.txt',sep=''),what=numeric())
 	
 	test.rows <- test.set
 	
@@ -257,7 +263,6 @@ if (do.eval=='y')
 	source('model.eval.fxn.r')
 	source('model.evaluation.r')
 	
-	# eval.table <- data.frame(nass.dev.exp.cv,nass.cor.cv,nass.dev.exp.test,nass.cor.test,landsat.dev.exp.cv,landsat.cor.cv,landsat.dev.exp.test,landsat.cor.test)
 	eval.table <- data.frame(nass.dev.exp.cv,nass.cor.cv,nass.dev.exp.test,nass.cor.test)
 	write.csv(eval.table,paste(output.path,'performance.v',ver,'.csv',sep=''))
 
@@ -266,15 +271,7 @@ if (do.eval=='y')
 # Prediction 
 if (do.prediction=='y')
 {
-	ver <- '34bbf'# 'f' if for final
-	# load(file=paste(output.path,'species.data.v31e.rdata',sep='')) # see above label description
-	# test.rows <- list(NA,NA,NA,NA,NA) 
-	# load(file=paste(output.path,'nass.models.var.v32.rdata',sep='')) # identifies the model variables based on previous set
-	# model.var <- var.in
-	
-	# lr <- c(0.01,0.005,0.01,0.01,0.01)
-	# source('brt.models.r')
-	# save(nass.models, file=paste(output.path,'nass.species.models.v',ver,'.rdata',sep=''))
+	ver <- '36t'# 'f' if for final
 	
 	# study.area.1 <- extent(matrix(c(582000,666000,2100000,2150000),ncol=2,byrow=TRUE))
 	study.area.1 <- NA
@@ -286,8 +283,6 @@ if (do.prediction=='y')
 	if (do.nass=='y') { load(file=paste(output.path,'nass.species.models.v',ver,'.rdata',sep='')) } 
 	source('model.prediction.r') # Be sure to change the file output names
 	if (do.nass=='y') { save(nass.pred, file=paste(output.path,'nass.pred.v',ver,'.rdata',sep='')) }
-
-	# Zero cutoff on maps should be based on the minimum modeled abundance from a presence point.
 }
 # ====================================================================
 # Kernel Density

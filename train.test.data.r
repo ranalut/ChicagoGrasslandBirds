@@ -53,10 +53,12 @@ grid.train.test.prev <- function(rows, cells, prop, counts)
 {
 	# print(class(rows)); print(class(cells))
 	all.prev <- psuedo.prev(counts)
+	train.prev <- all.prev
 	cat('prevalence =',all.prev,'\n')
 	test <- 1
 	
-	while (test > all.prev | test < (all.prev-0.05))
+	# while (test > train.prev | test < (train.prev-0.025))
+	while (test > (train.prev+0.02) | test < (train.prev-0.02))
 	{
 		all.cells <- unique(cells)
 		cell.prev <- NA
@@ -80,10 +82,11 @@ grid.train.test.prev <- function(rows, cells, prop, counts)
 			# cat(length(all.cells),length(weights),'\n')
 		}
 		output <- set[-1]
-		test <- psuedo.prev(counts[output])	
+		test <- psuedo.prev(counts[output])
+		train.prev <- psuedo.prev(counts[-output])
 		# cat('test prevalence =',test,'\n')
 	}
-	cat('test prevalence =',test,'\n')
+	cat('train prevalence =',train.prev,'test prevalence =',test,'\n')
 	# print(output[[i]])
 	return(output)
 }
