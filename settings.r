@@ -200,6 +200,8 @@ if (do.models=='y')
 	# Version 32: Set of 10 models with all variables and a random variable.
 	# Version 33: final set of 10 models to estimate model performance.
 	# Version 34: full model used for variable selection (nass.step). (bb) This is a set that replaces sedwre so test(prev) < train(prev)
+	# Version 35: ?
+	# Version 36: ten models built with 10 different train/test datasets.
 	save(nass.models, nass.step, file=paste(output.path,'nass.species.models.v',ver,'.rdata',sep=''))
 }
 # ===============================================================
