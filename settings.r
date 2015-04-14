@@ -18,7 +18,7 @@ do.test.data <- 'n' # DO NOT OVERWRITE. Change output name below if turned on.
 do.models <- 	'n'
 do.final <- 	'n'
 do.eval <- 		'n'
-do.prediction <-'y'
+do.prediction <-'n'
 do.nass <-		'y'
 do.landsat <-	'n'
 do.kd <- 		'n'
@@ -138,7 +138,8 @@ if (do.test.data=='y')
 	{
 		# v36 rule: prevalence in test is < train, but no more less than 0.025.
 		# v37 rule: test prev < train prev + 0.025 & > train prev - 0.025
-		ver <- paste(37,letters[n],sep='')
+		# v38: just for figures.
+		ver <- paste(38,letters[n],sep='')
 		# ver <- '35c'
 		test.set <- list()
 		load(file=paste(output.path,'species.data.v31e.rdata',sep='')) # Could be any data
