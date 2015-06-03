@@ -4,11 +4,11 @@ from arcpy import env
 from arcpy.sa import *
 
 # Set environment settings
-env.workspace = "C:/Chicago_Grasslands/ChicagoGrasslands.gdb"
+env.workspace = "C:/Chicago_Grasslands/Bird_Abundance_Model_Outputs"
 arcpy.env.overwriteOutput = True
 
 # Set local variables
-inRaster = "C:/Chicago_Grasslands/Bird_Abundance_Model_Outputs/2014_nass_reclass.tif"
+inRaster = "2014_nass_reclass.tif"
 inSQLClause = "VALUE = 3 OR VALUE = 6 OR VALUE = 7 OR VALUE = 11 OR VALUE = 12"
 
 # Check out the ArcGIS Spatial Analyst extension license
@@ -26,4 +26,12 @@ attExtract.save("natural_areas.tif")
 speciesList = ["boboli", "easmea", "graspa", "henspa", "sedwre"]
 
 for species in speciesList:
-    
+    # Set local variables
+    birdModel = env.workspace + "/" + species + "_nass_v36w_mean_2_cal.tif"
+    mask = "natural_areas.tif"
+
+    # Execute ExtractByMask
+    outExtractByMask = ExtractByMask(birdModel, mask)
+
+    # Save the output
+    outExtractByMask.save(species + "_natural_areas.tif")
