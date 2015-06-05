@@ -1,3 +1,7 @@
+### Task: Create a raster containing only natural areas, based on NLCD land cover. Then use this raster to mask bird abundance model outputs for 5 species.
+### Author: Caitlin Jensen | National Audubon Society | cjensen@audubon.org
+### Revised: 06/03/2015
+
 # Import system modules
 import arcpy
 from arcpy import env

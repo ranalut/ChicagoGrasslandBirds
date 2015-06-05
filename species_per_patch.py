@@ -1,3 +1,8 @@
+### Task: Use patches to get zonal statistics from bird abundance model outputs (masked by natural areas)
+### and remove records that don't meet minimum number of birds criteria.
+### Author: Caitlin Jensen | National Audubon Society | cjensen@audubon.org
+### Revised: 06/03/2015
+
 # Import system modules
 import arcpy
 from arcpy import env
