@@ -64,7 +64,8 @@ arcpy.DeleteField_management("patches_30acre_cmap", dropFields)
 arcpy.AddField_management("patches_30acre_cmap", "acreage2", "FLOAT")
 arcpy.CalculateField_management("patches_30acre_cmap", "acreage2", "!shape.area@acres!", "PYTHON")
 
-# last step is to add a new integer field called "new_id" that serves as the unique id for each patch using
+# last step is to add a new integer field called "new_id" that serves as the unique id for each patch (including
+# new, smaller patches resulting from fragmentation caused by Identity) using
 # the python code below in field calculator
 arcpy.AddField_management("patches_30acre_cmap", "new_id", "SHORT")
 

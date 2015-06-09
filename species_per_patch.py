@@ -18,8 +18,8 @@ speciesList = ["boboli", "easmea", "graspa", "henspa", "sedwre"]
 for species in speciesList:
 
     # Set local variables
-    inZoneData = "patches_30acre_cmap"
-    zoneField = "OBJECTID"
+    inZoneData = "patches_30acre_cmap" # has unique new_id for each patch
+    zoneField = "new_id"
     inValueRaster = "C:/Chicago_Grasslands/Species_per_patch/" + species + "_natural_areas.tif"
     outTable = species + "_per_patch_ZS"
 
@@ -35,9 +35,12 @@ for species in speciesList:
     arcpy.AddJoin_management("patch_layer", zoneField, outTable, zoneField)
     arcpy.Select_analysis("patch_layer", species + "_per_patch")
     
-    # Add field "bird_count" and calculate number of birds in each patch
+    # Add field "bird_count"
     arcpy.AddField_management(species + "_per_patch", "bird_count", "FLOAT")
     arcpy.AlterField_management(species + "_per_patch", species + "_per_patch_ZS_SUM", "SUM")
+    # Renaming second new_id field "patch_id" so that can be easily referenced in GIV tool script
+    arcpy.AlterField_management(species + "_per_patch", species + "_per_patch_ZS_new_id", "patch_id")
+    # Calculate number of birds in each patch
     arcpy.CalculateField_management(species + "_per_patch", "bird_count", "!SUM! * 0.222395", "PYTHON")
 
     # Select only patches that meet minimum # of birds threshold.

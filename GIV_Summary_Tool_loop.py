@@ -1,7 +1,7 @@
 ### Task: Clip and summarize ecosystem service valuation grids and associated landscape types based on user-selected input feature
 ### Author: Zach Vernon | Chicago Metropolitan Agency for Planning | zvernon@cmap.illinois.gov
 ### Revised: 03/26/2015
-### Revised again on 06/05/2015 by Caitlin Jensen (National Audubon Society) to include a for loop that repeats the analysis for every feature of a feature class
+### Revised again on 06/09/2015 by Caitlin Jensen (National Audubon Society) to include a for loop that repeats the analysis for every feature of a feature class
 
 import arcpy
 
@@ -9,7 +9,7 @@ import arcpy
 species = "boboli"
 esv_grid = "D:/Chicago_Grasslands/GIS/GIV_Combined_Outputs.gdb/GIV2_3_EcosystemServiceValues"
 ltypes_grid = "D:/Chicago_Grasslands/GIS/GIV_Landscape_Types.gdb/all_types_combined"
-clip_feature = "D:/Chicago_Grasslands/GIS/Species_per_patch_final.gdb/" + species + "_per_patch_final_sample"
+clip_feature = "D:/Chicago_Grasslands/GIS/Species_per_patch_final2.gdb/" + species + "_per_patch_final_sample"
 #out_gdb = "C:/Chicago_Grasslands/GIV_Tool_Outputs.gdb"
 out_path = "D:/Chicago_Grasslands/GIS/GIV_Tool_Outputs_" + species
 
@@ -28,10 +28,10 @@ print "Starting loop..."
 
 for row in rows:
 	feat = row.shape
-	id = str(row.objectid)
+	patchID = str(row.patch_id)
 	
-	esv_out_table_name = "EcosystemService_Summary_" + species + id + "_sample.dbf"
-##	ltypes_out_table_name = "GIV_LandscapeTypes_SummaryTable_" + species + str(row.objectid)
+	esv_out_table_name = "EcosystemService_Summary_" + species + patchID + "_sample.dbf"
+##	ltypes_out_table_name = "GIV_LandscapeTypes_SummaryTable_" + species + str(row.new_id)
 	
 	esv_clip = 'in_memory/ESV_clip'
 	esv_out_table = out_path + '/' + esv_out_table_name
@@ -39,7 +39,7 @@ for row in rows:
 ##	ltypes_out_table = out_gdb+'/'+ltypes_out_table_name
 	
 	arcpy.Clip_management(esv_grid,'#',esv_clip,feat,None,'ClippingGeometry')
-	print "Clipped feature " + id
+	print "Clipped feature " + patchID
 	# Create list containing fields in clipped ESV
 	esv_fields = [field.name for field in arcpy.ListFields(esv_clip)]
 
@@ -49,7 +49,7 @@ for row in rows:
 	# Multiple each field by cell count
 	with arcpy.da.SearchCursor(esv_clip,esv_fields) as cursor:
 		esv_value_list[0]='Dollar Value'
-		esv_value_list[1]=id
+		esv_value_list[1]=patchID
 		for row in cursor:
 			esv_value_list[2]+=(row[esv_fields.index('FloodControl_DollarValue')]*row[esv_fields.index('Count')])
 			esv_value_list[3]+=(row[esv_fields.index('GroundwaterRecharge_DollarValue')]*row[esv_fields.index('Count')])
