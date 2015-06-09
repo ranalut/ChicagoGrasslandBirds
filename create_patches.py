@@ -12,7 +12,7 @@ from arcpy import env
 env.workspace = "C:/Chicago_Grasslands/Species_per_patch/Species_per_patch.gdb"
 env.overwriteOutput = True
 
-# Set local variables
+### Set local variables
 raster = "C:/Chicago_Grasslands/Bird_Abundance_Model_Outputs/natural_areas_clump.tif"
 polygon = "natural_areas_clump"
 field = "VALUE"
@@ -63,3 +63,18 @@ arcpy.DeleteField_management("patches_30acre_cmap", dropFields)
 # additional polygons when a patch covered more than one county.
 arcpy.AddField_management("patches_30acre_cmap", "acreage2", "FLOAT")
 arcpy.CalculateField_management("patches_30acre_cmap", "acreage2", "!shape.area@acres!", "PYTHON")
+
+# last step is to add a new integer field called "new_id" that serves as the unique id for each patch using
+# the python code below in field calculator
+arcpy.AddField_management("patches_30acre_cmap", "new_id", "SHORT")
+
+codeblock = """
+counter = 0
+def uniqueID():
+    global counter
+    counter += 1
+    return counter"""
+arcpy.CalculateField_management("patches_30acre_cmap", "new_id", "uniqueID()", "PYTHON", codeblock)
+
+
+
