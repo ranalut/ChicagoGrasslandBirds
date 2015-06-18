@@ -7,7 +7,7 @@
 library(foreign)
 
 file_path <- 'C:/Chicago_Grasslands/Species_per_patch/'
-species <- 'boboli'
+species <- 'sedwre'
 file_name <- '_final.dbf'
 
 counties <- c('Cook','DuPage','Kane','Kendall','Lake','McHenry','Will')
