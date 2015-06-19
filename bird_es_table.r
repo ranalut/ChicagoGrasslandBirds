@@ -31,6 +31,7 @@ spp <- spp[,c(3:4,2,13:18,30,24:29,37,31:36)] # adds column suffix
 
 # rename columns
 colnames(spp)[c(10:23)] <- c('acreage_Protected','bird_count_Protected','Flood_Protected','Grndwtr_Protected','WaterPur_Protected','CarbonStor_Protected','Aggregate_Protected','acreage_Unprotected','bird_count_Unprotected','Flood_Unprotected','Grndwtr_Unprotected','WaterPur_Unprotected','CarbonStor_Unprotected','Aggregate_Unprotected')
+#stop('cmj')
 
 for (i in 1:length(counties))
 {
@@ -39,8 +40,13 @@ for (i in 1:length(counties))
   
   # Order
   cty_spp <- cty_spp[order(cty_spp[,'acreage_Unprotected'],na.last=TRUE,decreasing=TRUE),]
- # print(head(cty_spp)); stop('cmj')
-  
+ #stop('cmj')
+ 
+  # Create 'Rank' column
+ cty_spp$rank <- rank(-cty_spp$acreage_Unprotected)
+ #stop('cmj')
+ 
+
   #Sum field
   temp <- apply(X=cty_spp[,3:23],MARGIN=2,FUN=sum)
   temp <- c(counties[i],NA,round(temp))
@@ -48,8 +54,10 @@ for (i in 1:length(counties))
   #stop('cmj')
   
   # Subset top ten
-  sub_spp <- cty_spp[1:11,]
-  # stop('cmj')
+  sub_spp <- cty_spp[1:16,]
+ 
+  write.csv(sub_spp,paste(file_path,counties[i],'_top15results_rank_',species,'.csv',sep=''))
+ #stop('cmj')
   
   # Collate
   # Build a new table by row
@@ -77,6 +85,7 @@ for (i in 1:length(counties))
  #stop('cmj')
  
  colnames(output) <- c("County","Patch ID","Status","Acreage","Number of Birds","Flood Control","Groundwater Recharge","Water Purification","Carbon Sequestration","All Services")
-  write.csv(output,paste(file_path,counties[i],'_results_',species,'.csv',sep=''))
+  write.csv(output,paste(file_path,counties[i],'_top15results_',species,'.csv',sep=''))
 
 }
+
