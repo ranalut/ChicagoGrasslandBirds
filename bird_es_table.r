@@ -7,7 +7,7 @@
 library(foreign)
 
 file_path <- 'C:/Chicago_Grasslands/Species_per_patch/'
-species <- 'sedwre'
+species <- 'henspa'
 file_name <- '_final.dbf'
 
 counties <- c('Cook','DuPage','Kane','Kendall','Lake','McHenry','Will')
@@ -73,7 +73,7 @@ for (i in 1:length(counties))
   # output <- round(as.numeric(output)) 
   # stop('cmj') 
  
-  for (j in 2:11)
+  for (j in 2:16)
   {
     # print(as.numeric(sub_spp[i,c(10:16)]))
     output <- rbind(output,round(as.numeric(sub_spp[j,c(2,10:16)]))) # protected
@@ -81,7 +81,7 @@ for (i in 1:length(counties))
     
   }
  # stop('cmj')
-  output <- data.frame(county=rep(counties[i],22),output[,c('patch_id')],status=rep(c('protected','unprotected'),11),output[,2:8])
+  output <- data.frame(county=rep(counties[i],32),output[,c('patch_id')],status=rep(c('protected','unprotected'),16),output[,2:8])
  #stop('cmj')
  
  colnames(output) <- c("County","Patch ID","Status","Acreage","Number of Birds","Flood Control","Groundwater Recharge","Water Purification","Carbon Sequestration","All Services")
