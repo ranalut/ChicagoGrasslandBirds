@@ -7,7 +7,7 @@
 library(foreign)
 
 file_path <- 'C:/Chicago_Grasslands/Species_per_patch/'
-species <- 'henspa'
+species <- 'sedwre'
 file_name <- '_final.dbf'
 
 counties <- c('Cook','DuPage','Kane','Kendall','Lake','McHenry','Will')
@@ -54,9 +54,9 @@ for (i in 1:length(counties))
   #stop('cmj')
   
   # Subset top ten
-  sub_spp <- cty_spp[1:16,]
+  sub_spp <- cty_spp[1:11,]
  
-  write.csv(sub_spp,paste(file_path,counties[i],'_top15results_rank_',species,'.csv',sep=''))
+  write.csv(sub_spp,paste(file_path,counties[i],'_top10results_rank_',species,'.csv',sep=''))
  #stop('cmj')
   
   # Collate
@@ -73,7 +73,7 @@ for (i in 1:length(counties))
   # output <- round(as.numeric(output)) 
   # stop('cmj') 
  
-  for (j in 2:16)
+  for (j in 2:11)
   {
     # print(as.numeric(sub_spp[i,c(10:16)]))
     output <- rbind(output,round(as.numeric(sub_spp[j,c(2,10:16)]))) # protected
@@ -81,11 +81,13 @@ for (i in 1:length(counties))
     
   }
  # stop('cmj')
-  output <- data.frame(county=rep(counties[i],32),output[,c('patch_id')],status=rep(c('protected','unprotected'),16),output[,2:8])
+  output <- data.frame(county=rep(counties[i],22),output[,c('patch_id')],status=rep(c('protected','unprotected'),11),output[,2:8])
  #stop('cmj')
  
  colnames(output) <- c("County","Patch ID","Status","Acreage","Number of Birds","Flood Control","Groundwater Recharge","Water Purification","Carbon Sequestration","All Services")
-  write.csv(output,paste(file_path,counties[i],'_top15results_',species,'.csv',sep=''))
+ 
+ output$species <- species
+  write.csv(output,paste(file_path,counties[i],'_top10results_',species,'.csv',sep=''))
 
 }
 
