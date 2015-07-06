@@ -9,11 +9,11 @@ import arcpy
 from arcpy import env
 
 # Set environment settings
-env.workspace = "C:/Chicago_Grasslands/Species_per_patch/Species_per_patch.gdb"
+env.workspace = "C:/Chicago_Grasslands/Species_per_patch_20150702.gdb"
 env.overwriteOutput = True
 
 ### Set local variables
-raster = "C:/Chicago_Grasslands/Bird_Abundance_Model_Outputs/natural_areas_clump.tif"
+raster = "C:/Chicago_Grasslands/natural_areas_clump.tif"
 polygon = "natural_areas_clump"
 field = "VALUE"
 
@@ -54,30 +54,16 @@ in_field = "Shape_Area"
 join_field = "MAX_Shape_Area"
 where_clause = '"MAX_Shape_Area" > 0'
 
-#arcpy.Intersect_analysis(inFeatures, intersectOutput)
-#arcpy.Statistics_analysis(intersectOutput, statsTable, statsFields, caseField)
-#arcpy.JoinField_management(intersectOutput, in_field, statsTable, join_field)
-#arcpy.Select_analysis(intersectOutput, "intersect_max_area", where_clause)
-#arcpy.JoinField_management(inFeatures[0], "OBJECTID", "intersect_max_area", caseField)
-#arcpy.AddField_management(inFeatures[0], "county_name", "TEXT")
+arcpy.Intersect_analysis(inFeatures, intersectOutput)
+arcpy.Statistics_analysis(intersectOutput, statsTable, statsFields, caseField)
+arcpy.JoinField_management(intersectOutput, in_field, statsTable, join_field)
+arcpy.Select_analysis(intersectOutput, "intersect_max_area", where_clause)
+arcpy.JoinField_management(inFeatures[0], "OBJECTID", "intersect_max_area", caseField)
+arcpy.AddField_management(inFeatures[0], "county_name", "TEXT")
 arcpy.CalculateField_management(inFeatures[0], "county_name", "!NAME!", "PYTHON")
 
-### Use Identity to tag each patch with its county name. We ended up not using Identity because it fragments the
-### patches that span multiple counties.
-##inFeatures = "patches_30acre_counties"
-##idFeatures = "cmap_counties"
-##outFeatures = "patches_30acre_cmap"
-##arcpy.Identity_analysis(inFeatures, idFeatures, outFeatures)
-
-
-### Add and calculate "acreage2" field - this is the acreage for the polygons after Identity was run, which created
-### additional polygons when a patch covered more than one county.
-##arcpy.AddField_management("patches_30acre_cmap", "acreage2", "FLOAT")
-##arcpy.CalculateField_management("patches_30acre_cmap", "acreage2", "!shape.area@acres!", "PYTHON")
-
-# last step is to add a new integer field called "new_id" that serves as the unique id for each patch (including
-# new, smaller patches resulting from fragmentation caused by Identity) using
-# the python code below in field calculator
+# last step is to add a new integer field called "patch_id" that serves as the unique id for each patch
+# using the python code below in field calculator
 arcpy.AddField_management(inFeatures[0], "patch_id", "SHORT")
 
 codeblock = """
