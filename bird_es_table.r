@@ -23,7 +23,7 @@ spp <- cbind(spp,temp)
 
 temp <- spp$unprotect * spp[,c('bird_count','Flood','Grndwtr','WaterPur','CarbonStor','Aggregate','acreage')]
 spp <- cbind(spp,temp)
-#stop('cmj')
+stop('cmj')
 
 # keep only the columns you need and put in order you like
 spp <- spp[,c(3:4,2,13:18,30,24:29,37,31:36)] # adds column suffix
