@@ -6,9 +6,9 @@
 
 library(foreign)
 
-file_path <- 'C:/Chicago_Grasslands/Species_per_patch/'
+file_path <- 'C:/Chicago_Grasslands/'
 species <- 'sedwre'
-file_name <- '_final.dbf'
+file_name <- '_final_v2.dbf'
 
 counties <- c('Cook','DuPage','Kane','Kendall','Lake','McHenry','Will')
 
@@ -17,16 +17,25 @@ spp <- read.dbf(full_path,as.is=TRUE)
 #print(head(spp))
 # stop('cmj')
 
+# need to convert character data types to numeric
+spp$bird_count<-as.numeric(spp$bird_count)
+spp$Flood<-as.numeric(spp$Flood)
+spp$Grndwtr<-as.numeric(spp$Grndwtr)
+spp$WaterPur<-as.numeric(spp$WaterPur)
+spp$CarbonStor<-as.numeric(spp$CarbonStor)
+spp$Aggregate<-as.numeric(spp$Aggregate)
+spp$acreage<-as.numeric(spp$acreage)
+
 temp <- spp$protect * spp[,c('bird_count','Flood','Grndwtr','WaterPur','CarbonStor','Aggregate','acreage')]
 spp <- cbind(spp,temp)
 #stop('cmj')
 
 temp <- spp$unprotect * spp[,c('bird_count','Flood','Grndwtr','WaterPur','CarbonStor','Aggregate','acreage')]
 spp <- cbind(spp,temp)
-stop('cmj')
+#stop('cmj')
 
 # keep only the columns you need and put in order you like
-spp <- spp[,c(3:4,2,13:18,30,24:29,37,31:36)] # adds column suffix
+spp <- spp[,c(3,5,2,13:18,29,23:28,36,30:35)] # adds column suffix
 #stop('cmj')
 
 # rename columns
@@ -54,7 +63,8 @@ for (i in 1:length(counties))
   #stop('cmj')
   
   # Subset top ten
-  sub_spp <- cty_spp[1:11,]
+  sub_spp <- cty_spp[1,]
+ stop('cmj')
  
   write.csv(sub_spp,paste(file_path,counties[i],'_top10results_rank_',species,'.csv',sep=''))
  #stop('cmj')
