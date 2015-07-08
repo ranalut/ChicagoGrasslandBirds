@@ -7,7 +7,7 @@
 library(foreign)
 
 file_path <- 'C:/Chicago_Grasslands/'
-species <- 'sedwre'
+species <- 'boboli'
 file_name <- '_final_v2.dbf'
 
 # We no longer want to separate out by county, but instead look across entire CMAP region.
@@ -16,7 +16,7 @@ file_name <- '_final_v2.dbf'
 full_path <- paste(file_path,species,file_name,sep='')
 spp <- read.dbf(full_path,as.is=TRUE)
 #print(head(spp))
-stop('cmj')
+#stop('cmj')
 
 # need to convert character data types to numeric
 spp$bird_count<-as.numeric(spp$bird_count)
@@ -29,7 +29,7 @@ spp$acreage<-as.numeric(spp$acreage)
 
 temp <- spp$protect * spp[,c('bird_count','Flood','Grndwtr','WaterPur','CarbonStor','Aggregate','acreage')]
 spp <- cbind(spp,temp)
-stop('cmj')
+#stop('cmj')
 
 temp <- spp$unprotect * spp[,c('bird_count','Flood','Grndwtr','WaterPur','CarbonStor','Aggregate','acreage')]
 spp <- cbind(spp,temp)
@@ -44,11 +44,11 @@ colnames(spp)[c(10:23)] <- c('acreage_Protected','bird_count_Protected','Flood_P
 #stop('cmj')
 
 # Order
-spp <- spp[order(spp[,'acreage_Unprotected'],na.last=TRUE,decreasing=TRUE),]
+spp <- spp[order(spp[,'Aggregate_Unprotected'],na.last=TRUE,decreasing=TRUE),]
 #stop('cmj')
  
 # Create 'Rank' column
-spp$rank <- rank(-spp$acreage_Unprotected)
+spp$rank <- rank(-spp$Aggregate_Unprotected)
 #stop('cmj')
  
 
@@ -63,7 +63,7 @@ sub_spp <- spp[1:51,]
 colnames(sub_spp) <- c("county","patch_id","acreage","bird_count","Flood","Grndwtr","WaterPur","CarbonStor","Aggregate","acreage","bird_count","Flood","Grndwtr","WaterPur","CarbonStor","Aggregate","acreage","bird_count","Flood","Grndwtr","WaterPur","CarbonStor","Aggregate")
 #stop('cmj')
  
-write.csv(sub_spp,paste(file_path,'cmap_top50results_rank_by_acreage_',species,'.csv',sep=''))
+write.csv(sub_spp,paste(file_path,'cmap_top50results_rank_by_ES',species,'.csv',sep=''))
 #stop('cmj')
   
 # Collate
@@ -99,5 +99,5 @@ colnames(output) <- c("County","Patch ID","Status","Acreage","Number of Birds","
 
 output$species <- species
 
-write.csv(output,paste(file_path,'cmap_top50results_acreage_',species,'.csv',sep=''))
+write.csv(output,paste(file_path,'cmap_top50results_ES_',species,'.csv',sep=''))
 
