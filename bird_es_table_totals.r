@@ -7,7 +7,7 @@
 library(foreign)
 
 file_path <- 'C:/Chicago_Grasslands/'
-species <- 'sedwre'
+species <- 'boboli'
 file_name <- '_final_v2.dbf'
 
 counties <- c('Cook','DuPage','Kane','Kendall','Lake','McHenry','Will')
@@ -15,7 +15,7 @@ counties <- c('Cook','DuPage','Kane','Kendall','Lake','McHenry','Will')
 full_path <- paste(file_path,species,file_name,sep='')
 spp <- read.dbf(full_path,as.is=TRUE)
 #print(head(spp))
-# stop('cmj')
+stop('cmj')
 
 # need to convert character data types to numeric
 spp$bird_count<-as.numeric(spp$bird_count)
@@ -35,7 +35,7 @@ spp <- cbind(spp,temp)
 #stop('cmj')
 
 # keep only the columns you need and put in order you like
-spp <- spp[,c(3,5,2,13:18,29,23:28,36,30:35)] # adds column suffix
+spp <- spp[,c(3:4,2,5:10,21,15:20,28,22:27)] # adds column suffix
 #stop('cmj')
 
 # rename columns
@@ -46,7 +46,7 @@ for (i in 1:length(counties))
 {
 
   cty_spp <- spp[spp$county==counties[i],]
-  
+
   # Order
   cty_spp <- cty_spp[order(cty_spp[,'acreage_Unprotected'],na.last=TRUE,decreasing=TRUE),]
  #stop('cmj')
@@ -58,17 +58,16 @@ for (i in 1:length(counties))
 
   #Sum field
   temp <- apply(X=cty_spp[,3:23],MARGIN=2,FUN=sum)
+  #stop('cmj')
   temp <- c(counties[i],NA,round(temp))
   cty_spp <- rbind(temp,cty_spp)
+  #cty_spp[, c(3:23)] <- sapply(cty_spp[, c(3:23)], as.numeric)
   #stop('cmj')
   
   # subset totals row
   sub_spp <- cty_spp[1,]
- stop('cmj')
- 
-  write.csv(sub_spp,paste(file_path,counties[i],'_top10results_rank_',species,'.csv',sep=''))
  #stop('cmj')
-  
+ 
   # Collate
   # Build a new table by row
   # Loop through a sequence of rbind commands pulling specific columns and rows
@@ -81,23 +80,15 @@ for (i in 1:length(counties))
 
   output <- rbind(output,output2) # joining protected & unprotected totals
   # output <- round(as.numeric(output)) 
-  # stop('cmj') 
- 
-  for (j in 2:11)
-  {
-    # print(as.numeric(sub_spp[i,c(10:16)]))
-    output <- rbind(output,round(as.numeric(sub_spp[j,c(2,10:16)]))) # protected
-    output <- rbind(output,round(as.numeric(sub_spp[j,c(2,17:23)]))) # unprotected
-    
-  }
- # stop('cmj')
-  output <- data.frame(county=rep(counties[i],22),output[,c('patch_id')],status=rep(c('protected','unprotected'),11),output[,2:8])
+  #stop('cmj') 
+  
+  output <- data.frame(county=rep(counties[i],2),output[,c('patch_id')],status=rep(c('protected','unprotected'),1),output[,2:8])
  #stop('cmj')
  
  colnames(output) <- c("County","Patch ID","Status","Acreage","Number of Birds","Flood Control","Groundwater Recharge","Water Purification","Carbon Sequestration","All Services")
  
  output$species <- species
-  write.csv(output,paste(file_path,counties[i],'_top10results_',species,'.csv',sep=''))
+  write.csv(output,paste(file_path,counties[i],'_totalsNEW_',species,'.csv',sep=''))
 
 }
 

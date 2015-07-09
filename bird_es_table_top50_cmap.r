@@ -16,7 +16,7 @@ file_name <- '_final_v2.dbf'
 full_path <- paste(file_path,species,file_name,sep='')
 spp <- read.dbf(full_path,as.is=TRUE)
 #print(head(spp))
-stop('cmj')
+#stop('cmj')
 
 # need to convert character data types to numeric
 spp$bird_count<-as.numeric(spp$bird_count)
@@ -29,14 +29,14 @@ spp$acreage<-as.numeric(spp$acreage)
 
 temp <- spp$protect * spp[,c('bird_count','Flood','Grndwtr','WaterPur','CarbonStor','Aggregate','acreage')]
 spp <- cbind(spp,temp)
-stop('cmj')
+#stop('cmj')
 
 temp <- spp$unprotect * spp[,c('bird_count','Flood','Grndwtr','WaterPur','CarbonStor','Aggregate','acreage')]
 spp <- cbind(spp,temp)
 #stop('cmj')
 
 # keep only the columns you need and put in order you like
-spp <- spp[,c(3:4,2,12:17,29,23:28,36,30:35)] # adds column suffix
+spp <- spp[,c(3:4,2,5:10,21,15:20,28,22:27)] # adds column suffix
 #stop('cmj')
 
 # rename columns
@@ -63,7 +63,7 @@ sub_spp <- spp[1:51,]
 colnames(sub_spp) <- c("county","patch_id","acreage","bird_count","Flood","Grndwtr","WaterPur","CarbonStor","Aggregate","acreage","bird_count","Flood","Grndwtr","WaterPur","CarbonStor","Aggregate","acreage","bird_count","Flood","Grndwtr","WaterPur","CarbonStor","Aggregate")
 #stop('cmj')
  
-write.csv(sub_spp,paste(file_path,'cmap_top50results_rank_by_acreage_',species,'.csv',sep=''))
+write.csv(sub_spp,paste(file_path,'cmap_top50_rank_by_acreage_',species,'.csv',sep=''))
 #stop('cmj')
   
 # Collate
@@ -99,5 +99,5 @@ colnames(output) <- c("County","Patch ID","Status","Acreage","Number of Birds","
 
 output$species <- species
 
-write.csv(output,paste(file_path,'cmap_top50results_acreage_',species,'.csv',sep=''))
+write.csv(output,paste(file_path,'cmap_top50_acreage_',species,'.csv',sep=''))
 
