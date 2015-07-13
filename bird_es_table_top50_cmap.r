@@ -60,11 +60,11 @@ spp$rank <- rank(-spp$acreage_Unprotected)
   
 # Subset top 50
 sub_spp <- spp[1:51,]
-colnames(sub_spp) <- c("county","patch_id","acreage","bird_count","Flood","Grndwtr","WaterPur","CarbonStor","Aggregate","acreage","bird_count","Flood","Grndwtr","WaterPur","CarbonStor","Aggregate","acreage","bird_count","Flood","Grndwtr","WaterPur","CarbonStor","Aggregate")
+colnames(sub_spp) <- c("county","patch_id","acreage","bird_count","Flood","Grndwtr","WaterPur","CarbonStor","Aggregate","acreage_p","bird_count_p","Flood_p","Grndwtr_p","WaterPur_p","CarbonStor_p","Aggregate_p","acreage_u","bird_count_u","Flood_u","Grndwtr_u","WaterPur_u","CarbonStor_u","Aggregate_u")
 #stop('cmj')
  
 write.csv(sub_spp,paste(file_path,'cmap_top50_rank_by_acreage_',species,'.csv',sep=''))
-#stop('cmj')
+stop('cmj')
   
 # Collate
 # Build a new table by row
