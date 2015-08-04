@@ -13,6 +13,9 @@ nass.path <- paste(drive,':/chicago_grasslands/models/v',ver,'/',sep='')
 # # cmap_p <- spTransform(cmap_p,CRS('+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +units=m +no_defs'))
 # # cmap <- rasterize(cmap_p, nat_area, field='CNTY_FIPS',mask=TRUE)
 # cmap <- raster(paste(drive,':/chicago_grasslands/gis/nat_area_cmap.tif',sep=''))
+# cmap <- raster(paste(drive,':/chicago_grasslands/gis/patches_30acre_counties.tif',sep=''))
+# cmap <- extend(cmap,temp)
+
 # plot(cmap); stop('cbw')
 
 output <- as.data.frame(matrix(NA,ncol=5,nrow=20))
@@ -44,10 +47,10 @@ for (j in 1:20)
 	}
 }
 
-write.csv(output,paste(nass.path,'pop.est.nass.v',ver,'.cut.cmap.nat.areas.csv',sep=''))
+write.csv(output,paste(nass.path,'pop.est.nass.v',ver,'.cut.cmap.30a.nat.areas.csv',sep=''))
 
-# output <- read.csv(paste(nass.path,'pop.est.nass.v',ver,'.cut.cmap.nat.areas.csv',sep=''),row.names=1)
-output <- read.csv(paste(nass.path,'pop.est.nass.v',ver,'.cut.nat.areas.csv',sep=''),row.names=1)
+# output <- read.csv(paste(nass.path,'pop.est.nass.v',ver,'.cut.cmap.30a.nat.areas.csv',sep=''),row.names=1)
+# output <- read.csv(paste(nass.path,'pop.est.nass.v',ver,'.cut.nat.areas.csv',sep=''),row.names=1)
 load(file=paste(nass.path,'all.performance.v',ver,'.rdata',sep=''))
 library(Hmisc)
 output2 <- as.data.frame(matrix(NA,ncol=5,nrow=4))
@@ -62,6 +65,6 @@ for (i in 1:5)
     output2[4,i] <- round(100*sqrt(wtd.var(output[,i],weights=weights, na.rm=FALSE))/output2[1,i])
 }
 
-# write.csv(output2,paste(nass.path,'median.pop.est.nass.v',ver,'.cut.cmap.nat.areas.csv',sep=''))
-write.csv(output2,paste(nass.path,'median.pop.est.nass.v',ver,'.cut.nat.areas.csv',sep=''))
+write.csv(output2,paste(nass.path,'median.pop.est.nass.v',ver,'.cut.cmap.30a.nat.areas.csv',sep=''))
+# write.csv(output2,paste(nass.path,'median.pop.est.nass.v',ver,'.cut.nat.areas.csv',sep=''))
 
