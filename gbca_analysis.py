@@ -94,7 +94,10 @@ inFeatures2 = "C:/Chicago_Grasslands/Grassland_Patches_CMAP.gdb/unprotected_patc
 joinField2 = "patch_id"
 joinTable2 = "C:/Chicago_Grasslands/Manuscript.gdb/unprotected_matrix"
 fieldList2 = ["gbca_type"]
+fieldList3 = ["MBG_Width", "patch_ha", "COUNT_1", "grass_ha", "total_ha", "percent_grass"]
 
-# Join two feature classes by the patch_id field and only carry
-# over the gbca_type field
-arcpy.JoinField_management (inFeatures2, joinField2, joinTable2, joinField2, fieldList2)
+### Join two feature classes by the patch_id field and only carry
+### over the gbca_type field
+##arcpy.JoinField_management (inFeatures2, joinField2, joinTable2, joinField2, fieldList2)
+
+arcpy.JoinField_management (inFeatures2, joinField2, joinTable2, joinField2, fieldList3)
