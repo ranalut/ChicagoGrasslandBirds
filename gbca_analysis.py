@@ -33,36 +33,36 @@ joinField = "patch_id"
 joinTable = "C:/Chicago_Grasslands/Manuscript.gdb/natural_areas_matrix_zs"
 fieldList = ["COUNT"]
 
-### Join two feature classes by the zonecode field and only carry
-### over the COUNT field
-##arcpy.JoinField_management (inFeatures, joinField, joinTable, joinField, fieldList)
+# Join two feature classes by the patch_id field and only carry
+# over the COUNT field
+arcpy.JoinField_management (inFeatures, joinField, joinTable, joinField, fieldList)
 
-### Add "grass_ha" field representing the amount of grassland area (hectares)
-### in each buffered patch ("blob")
-##fieldName = "grass_ha"
-##arcpy.AddField_management(inFeatures, fieldName, "DOUBLE")
+# Add "grass_ha" field representing the amount of grassland area (hectares)
+# in each buffered patch ("blob")
+fieldName = "grass_ha"
+arcpy.AddField_management(inFeatures, fieldName, "DOUBLE")
 
-### Calculate "grass_ha" field by multiplying the number of pixels within each
-### blob by the cell size
-##expression = "[COUNT_1] * 0.09"
-##arcpy.CalculateField_management(inFeatures, fieldName, expression)
+# Calculate "grass_ha" field by multiplying the number of pixels within each
+# blob by the cell size
+expression = "[COUNT_1] * 0.09"
+arcpy.CalculateField_management(inFeatures, fieldName, expression)
 
-### Add "total_ha" field representing the total area of each blob (hectares)
-##fieldName2 = "total_ha"
-##arcpy.AddField_management(inFeatures, fieldName2, "DOUBLE")
-##
-### Calculate "total_ha"
-##expression2 = "!shape.area@hectares!"
-##arcpy.CalculateField_management(inFeatures, fieldName2, expression2, "PYTHON")
+# Add "total_ha" field representing the total area of each blob (hectares)
+fieldName2 = "total_ha"
+arcpy.AddField_management(inFeatures, fieldName2, "DOUBLE")
 
-### Add "percent_grass" field representing the proportion of grassland in each blob
-##fieldName3 = "percent_grass"
-##arcpy.AddField_management(inFeatures, fieldName3, "DOUBLE")
-##
-### Calculate "percent_grass" by dividing "grass_ha" by "total_ha" and multiplying
-### by 100
-##expression3 = "([grass_ha]/[total_ha]) * 100"
-##arcpy.CalculateField_management(inFeatures, fieldName3, expression3)
+# Calculate "total_ha"
+expression2 = "!shape.area@hectares!"
+arcpy.CalculateField_management(inFeatures, fieldName2, expression2, "PYTHON")
+
+# Add "percent_grass" field representing the proportion of grassland in each blob
+fieldName3 = "percent_grass"
+arcpy.AddField_management(inFeatures, fieldName3, "DOUBLE")
+
+# Calculate "percent_grass" by dividing "grass_ha" by "total_ha" and multiplying
+# by 100
+expression3 = "([grass_ha]/[total_ha]) * 100"
+arcpy.CalculateField_management(inFeatures, fieldName3, expression3)
 
 # Add "gbca_type" field representing the GBCA type attributed to the core
 fieldName4 = "gbca_type"
@@ -88,16 +88,11 @@ arcpy.AddField_management(inFeatures, fieldName4, "SHORT")
 # if core_type = 4 AND percent_grass >= 10,then gbca_type = 4
 # if core_type = 4 AND percent_grass < 10,then gbca_type = 0
 
-# Join "gbca_type" field to patches feature class
-# Set the local parameters for Join Field
-inFeatures2 = "C:/Chicago_Grasslands/Grassland_Patches_CMAP.gdb/unprotected_patches_across_species"
-joinField2 = "patch_id"
-joinTable2 = "C:/Chicago_Grasslands/Manuscript.gdb/unprotected_matrix"
-fieldList2 = ["gbca_type"]
-fieldList3 = ["MBG_Width", "patch_ha", "COUNT_1", "grass_ha", "total_ha", "percent_grass"]
+# Join "core_type" and "gbca_type" from unprotected_matrix to patches (after correcting core_type field and then gbca_type on 12/29/2015)
+inFeatures = "C:/Chicago_Grasslands/Grassland_Patches_CMAP.gdb/unprotected_patches_across_species"
+joinField = "patch_id"
+joinTable = "C:/Chicago_Grasslands/Manuscript.gdb/unprotected_matrix"
+fieldList = ["core_type", "gbca_type"]
 
-### Join two feature classes by the patch_id field and only carry
-### over the gbca_type field
-##arcpy.JoinField_management (inFeatures2, joinField2, joinTable2, joinField2, fieldList2)
+arcpy.JoinField_management (inFeatures, joinField, joinTable, joinField, fieldList)
 
-arcpy.JoinField_management (inFeatures2, joinField2, joinTable2, joinField2, fieldList3)
